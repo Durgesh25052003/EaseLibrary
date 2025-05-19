@@ -38,6 +38,9 @@ const userSchema = new mongoose.Schema(
       default:
         "https://res.cloudinary.com/dqj0xg1zv/image/upload/v1698236482/BookStore/defaultProfilePic.png",
     },
+    token: {
+      type: String,
+    },
   },
   {
     timestamps: true,

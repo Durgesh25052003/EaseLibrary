@@ -40,11 +40,13 @@ class Email {
     }
   }
 
-  async sendMailForgetPassword(toEmail, subject, name, reset_link) {
+  async sendMailForgetPassword(toEmail, subject,userName, reset_link) {
     const emailTemplateResetPass = fs.readFileSync(path.join(__dirname, 'forgetPasswordTemp.html'), 'utf-8')
     
-    const content = emailTemplateResetPass.replace(/{name}/g, userName)
-      .replace(/{resetlink}/g, reset_link)
+    const content = emailTemplateResetPass.replace(/{username}/g, userName)
+      .replace(/{resetLink}/g, reset_link)
+
+      console.log(reset_link,"reset_link");
 
     try {
       const info = await this.transporter.sendMail({

@@ -27,8 +27,20 @@ export const signUp=async (user)=>{
 
 export const forgetPassword=async(email)=>{
     try {
-        const res=await userRoute.patch("/forget-password",{
+        const res=await userRoute.patch("/forgot-password",{
             email
+        })
+        console.log(res);
+        return res.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const resetPassword=async(password,token)=>{
+    try {
+        const res=await userRoute.patch(`/reset-password/${token}`,{
+            password
         })
         console.log(res);
         return res.data

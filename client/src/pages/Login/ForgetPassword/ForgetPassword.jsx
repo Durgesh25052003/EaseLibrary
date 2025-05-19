@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
-import UserRouter from '../../../../../server/Routes/UserRoutes'
+import { forgetPassword } from '../../../Servies/servies'
 
 function ForgetPassword() {
   const [email, setEmail] = useState('')
@@ -18,9 +18,7 @@ function ForgetPassword() {
     setIsSubmitting(true)
     try {
       // Add your password reset API call here
-      const res=UserRouter.get("/forget-password", {
-        email
-      })
+      const res= await forgetPassword(email)
       console.log(res);
       toast.success('Password reset link sent to your email!')
     } catch (error) {

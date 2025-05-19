@@ -1,7 +1,8 @@
 import UserModel from "../Models/UserModel.js";
 import jwt from "jsonwebtoken";
-import Email from "../utils/Email.js"; // Remove the curly braces
+import Email from "../../server/utils/Email.js"; // Remove the curly braces
 import bcrypt from "bcryptjs";
+import { useReducer } from "react";
 
 const createToken = (user) => {
   return jwt.sign(
@@ -154,7 +155,7 @@ export const protect = async (req, res, next) => {
 export const forgetPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const user = await UserModel.findByIdAndUpdate(email);
+    const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -163,29 +164,58 @@ export const forgetPassword = async (req, res, next) => {
     }
 
     const salt = await bcrypt.genSalt(10);
-    const resetLink = `http://localhost:5173/reset-password/${bcrypt.hash(
-      email,
-      salt
-    )}`;
+    const hashedEmail = await bcrypt.hash("EncyrptedToken", salt);
+    // Encode the token for URL safety
+    const encodedToken = encodeURIComponent(hashedEmail);
+    const resetLink = `http://localhost:5173/reset-password/${encodedToken}`;
+    
     const sendForgetPasswordReset = new Email();
-    sendForgetPasswordReset.sendMailForgetPassword(
+    await sendForgetPasswordReset.sendMailForgetPassword(
       email,
-      "pasword-reset",
+      "password-reset",
+      user.name,
       resetLink
     );
+
+    user.token = hashedEmail;
+    await user.save();
+    
     res.status(200).json({
       success: true,
       message: "Email sent successfully",
     });
   } catch (error) {
-    res.status(404).json({
+    console.error(error);
+    res.status(500).json({
       success: false,
-      message: "Route not found",
+      message: "Internal server error",
     });
   }
 };
 
-const resetPassword = async (req, res, next) => {
+export const resetPassword = async (req, res, next) => {
   try {
+    const { token } = req.params;
+    // Decode the token
+    const decodedToken = decodeURIComponent(token);
+    const user = await UserModel.findOne({ token: decodedToken });
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found", 
+      }) 
+    }
+    const { password } = req.body
+    
+    user.password = password;
+    console.log(password,"password");
+  
+    await user.save();
+    res.status(200).json({
+      success: true,
+      message: "Password reset successfully",
+    });
+
   } catch (error) {}
 };
