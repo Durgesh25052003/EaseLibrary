@@ -83,6 +83,27 @@ class Email {
       console.error('Email error:', error);
     }
   }
+
+  async sendDailyRemainderEmail(toEmail,subject,book,user){
+    const emailTemplateDailyRemainder=fs.readFileSync(path.join(__dirname,'emailTemplateDailyRemainder.html'),'utf-8')
+    const content = emailTemplateDailyRemainder
+    .replace(/{name}/g,user.name)
+    .replace(/{bookTitle}/g,book.title)
+    .replace(/{author}/g,book.author)
+    .replace(/{borrowDate}/g,book.borrowDate)
+    .replace(/{dueDate}/g,book.returnDate)
+
+    try {
+      const info = await this.transporter.sendMail({
+        from: process.env.GMAIL_USER,
+        to: toEmail,
+        subject: subject, 
+        html: content
+      })  
+    }catch (error) {
+      console.error('Email error:', error);
+    }
+  }
 }
 
 

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Library Reminder</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #00A8E8, #007EA7);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .book-list {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 168, 232, 0.1);
+            border-left: 4px solid #00A8E8;
+            border-radius: 4px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+        .highlight {
+            color: #FFD23F;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Daily Library Update</h1>
+            <p>Hello {name}!</p>
+        </div>
+        <div class="content">
+            <p>Here's your daily library update:</p>
+            
+            <div class="book-list">
+                <h3>📖 Books Due Soon:</h3>
+                {dueSoonBooks}
+            </div>
+
+            <div class="book-list">
+                <h3>⏰ Overdue Books:</h3>
+                {overdueBooks}
+            </div>
+
+            <div class="book-list">
+                <h3>✨ Book Recommendations:</h3>
+                {recommendations}
+            </div>
+
+            <p>Visit our library portal to manage your books:</p>
+            <p style="text-align: center;">
+                <a href="{libraryLink}" style="background: linear-gradient(to right, #00A8E8, #007EA7); color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Visit Library Portal</a>
+            </p>
+        </div>
+        <div class="footer">
+            <p>© {year} Library Management System. All rights reserved.</p>
+            <p>This is an automated email. Please do not reply.</p>
+        </div>
+    </div>
+</body>
+</html>
