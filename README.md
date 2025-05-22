@@ -1,6 +1,6 @@
 # 📚 Library Management System
 
-A modern, full-stack library management solution built with React and Node.js.
+A modern, full-stack library management solution built with React and Node.js
 
 ## ✨ Features
 
