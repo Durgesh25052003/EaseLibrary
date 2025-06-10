@@ -2,12 +2,14 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { login } from '../../Servies/servies'
 import toast, { Toaster } from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   })
+  const navigate=useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -20,9 +22,12 @@ function Login() {
     try {
       const res = await login(formData);
       console.log(res);
-      if (res.success===true) {
+      if (res.data.success===true) {
         toast.success('Login successful!');
         // Add navigation logic here if needed
+        if(res.data.user.isAdmin===true){
+          navigate('/admin')
+        }
       } else {
         toast.error('Invalid credentials');
       }

@@ -10,7 +10,7 @@ import upload from "../utils/multer.js";
 const BookRouter = express.Router();
 
 // Example route for getting all books
-BookRouter.get("/", getAllBooks);
+BookRouter.get("/getAllBooks", getAllBooks);
 
 // Example route for adding a new book
 BookRouter.post("/add-book", upload.single("coverImage"), addBook);

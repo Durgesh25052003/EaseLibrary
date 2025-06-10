@@ -1,7 +1,7 @@
 import cron from 'node-cron';
-import UserModel from '../Models/UserModel';
-import Email from '../utils/Email';
-import { borrowBooks } from '../Controllers/UserController';
+import UserModel from '../Models/UserModel.js';
+import Email from '../utils/Email.js';
+import { borrowBooks } from '../Controllers/UserController.js';
 
 function startDailyRemainder(){
 

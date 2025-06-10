@@ -162,6 +162,38 @@ export const returnBooks = async (req, res, next) => {
   }
 };
 
+export const getAllBorrowedBooks = async (req, res, next) => {
+  try {
+    const books=await BorrowModel.find()
+    .populate("user", "name email")
+
+     if(!books || books.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No borrowed books found",
+      });
+
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Borrowed books fetched successfully",
+      totalBooks: books.length,
+      data: books,
+    });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+    
+  }
+}
+
+
+
 export const getBorrowedBooks = async (req, res, next) => {
   try {
     const userId = req.params.id;

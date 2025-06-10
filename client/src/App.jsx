@@ -4,6 +4,8 @@ import Login from './pages/Login/Login';
 import Signup from './pages/Login/Signup';
 import ForgetPassword from './pages/Login/ForgetPassword/ForgetPassword';
 import ResetPassword from './pages/Login/ResetPassword';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import DashboardOverview from './pages/Admin/DashboardOverview'; // Import the new component
 
 const router= createBrowserRouter([
   {
@@ -21,12 +23,25 @@ const router= createBrowserRouter([
   {
     path: '/reset-password/:token',
     element: <ResetPassword />
+  },
+  {
+    path: '/admin',
+    element: <AdminDashboard />,
+    children: [
+      {
+        path: 'dashboard', // /admin/dashboard
+        element: <DashboardOverview /> // Use the new component here
+      },
+      {
+        path: 'users', // /admin/users
+        element: <h1 className="text-4xl font-bold text-[#343A40]">Manage Users</h1>
+      },
+      {
+        path: 'books', // /admin/books
+        element: <h1 className="text-4xl font-bold text-[#343A40]">Manage Books</h1>
+      }
+    ]
   }
-  // {
-  //   path:'/admin',
-  //   element:<Admin/>
-  // }
-  
 ])
 
 function App() {
@@ -37,4 +52,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
