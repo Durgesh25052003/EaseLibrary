@@ -14,7 +14,7 @@ export const borrowBooks = async (req, res, next) => {
         message: "User not found",
       });
     }
-  
+
     console.log(user.borrowedBooks);
 
     // Check if the book is already borrowed by the user
@@ -28,10 +28,10 @@ export const borrowBooks = async (req, res, next) => {
     }
     console.log(bookId, userId);
 
-   const isIncluded =user.borrowedBooks.some((book) => {
+    const isIncluded = user.borrowedBooks.some((book) => {
       return book._id.toString() === bookId.toString();
     });
-   console.log(isIncluded);
+    console.log(isIncluded);
 
     if (isIncluded) {
       return res.status(400).json({
@@ -72,9 +72,12 @@ export const borrowBooks = async (req, res, next) => {
     const returnDate = new Date();
     returnDate.setDate(returnDate.getDate() + days);
 
+    // Adding the return date and borrowed date also in user Document in borrowed Books for easy display
+
     const borrow = new BorrowModel({
       user: userId,
       book: bookId,
+      coverImage: book.coverImage,
       bookTitle: book.title,
       bookAuthor: book.author,
       userName: user.name,
@@ -148,6 +151,18 @@ export const returnBooks = async (req, res, next) => {
     book.stock++;
     await book.save();
 
+
+    //Removing returned Book data from BorrowedBook Model
+    const borrowedBooks=await BorrowModel.find({
+      book:bookId,
+      user:userId,
+    });
+
+    console.log(borrowBooks[0])
+    const borrowedBookId=borrowBooks[0]._id;
+
+    await BorrowModel.findByIdAndRemove(borrowedBookId);
+
     res.status(200).json({
       success: true,
       message: "Book returned successfully",
@@ -164,15 +179,13 @@ export const returnBooks = async (req, res, next) => {
 
 export const getAllBorrowedBooks = async (req, res, next) => {
   try {
-    const books=await BorrowModel.find()
-    .populate("user", "name email")
+    const books = await BorrowModel.find().populate("user", "name email");
 
-     if(!books || books.length === 0) {
+    if (!books || books.length === 0) {
       return res.status(404).json({
         success: false,
         message: "No borrowed books found",
       });
-
     }
 
     res.status(200).json({
@@ -181,18 +194,14 @@ export const getAllBorrowedBooks = async (req, res, next) => {
       totalBooks: books.length,
       data: books,
     });
-
   } catch (error) {
     console.log(error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
     });
-    
   }
-}
-
-
+};
 
 export const getBorrowedBooks = async (req, res, next) => {
   try {
@@ -221,7 +230,7 @@ export const getBorrowedBooks = async (req, res, next) => {
 
 export const getAllUsers = async (req, res, next) => {
   try {
-    const users= await UserModel.find().populate("borrowedBooks");
+    const users = await UserModel.find().populate("borrowedBooks");
     if (!users) {
       return res.status(404).json({
         success: false,
@@ -240,9 +249,8 @@ export const getAllUsers = async (req, res, next) => {
       success: false,
       message: "Internal server error",
     });
-    
   }
-}
+};
 export const getUser = async (req, res, next) => {
   try {
     const userId = req.params.id;

@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 
 function AdminDashboard() {
   // In a real application, you would fetch user role from context/state
   // For now, let's assume a user is an admin for demonstration
   const isAdmin = true; // This should come from user authentication data
+
+
+  const [ActiveTab, setActiveTab] = useState({
+    Active1: true,
+    Active2: false,
+    Active3: false,
+  })
+
+
 
   if (!isAdmin) {
     return (
@@ -22,27 +31,53 @@ function AdminDashboard() {
         <nav>
           <ul>
             <li className="mb-4">
-              <Link 
-                to="/admin/dashboard" 
-                className="block py-2 px-4 rounded-md hover:bg-white hover:text-[#007EA7] transition-colors duration-200 font-['Roboto']"
-              >
+              <Link
+                to="/admin/dashboard"
+                className={`block py-2 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active1 ? "bg-white text-[#007EA7]" : ""} transition-colors duration-200 font-['Roboto']`}
+                onClick={() => {
+                  setActiveTab(() => {
+                    return {
+                      Active1: true,
+                      Active2: false,
+                      Active3: false,
+                    }
+                  })
+                }}              >
                 Dashboard
               </Link>
             </li>
             <li className="mb-4">
-              <Link 
-                to="/admin/users" 
-                className="block py-2 px-4 rounded-md hover:bg-white hover:text-[#007EA7] transition-colors duration-200 font-['Roboto']"
+              <Link
+                to="/admin/users"
+                className={`block py-2 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active2 ? "bg-white text-[#007EA7]" : ""} transition-colors duration-200 font-['Roboto']`}
+                onClick={() => {
+                  setActiveTab(() => {
+                    return {
+                      Active1: false,
+                      Active2: true,
+                      Active3: false,
+                    }
+                  })
+                }}
               >
                 Manage Users
               </Link>
             </li>
             <li className="mb-4">
-              <Link 
-                to="/admin/books" 
-                className="block py-2 px-4 rounded-md hover:bg-white hover:text-[#007EA7] transition-colors duration-200 font-['Roboto']"
+              <Link
+                to="/admin/books"
+                className={`block py-2 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active3 ? "bg-white text-[#007EA7]" : ""}   transition-colors duration-200 font-['Roboto']`}
+                onClick={() => {
+                  setActiveTab(() => {
+                    return {
+                      Active1: false,
+                      Active2: false,
+                      Active3: true,
+                    }
+                  })
+                }}
               >
-                Manage Books
+                Manage Borrowed Books
               </Link>
             </li>
             {/* Add more admin links here */}

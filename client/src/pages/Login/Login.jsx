@@ -1,19 +1,21 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { login } from '../../Servies/servies'
-import toast, { Toaster } from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { login } from '../../Servies/servies';
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
 
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
-  })
-  const navigate=useNavigate()
+  });
+  const [showPassword, setShowPassword] = useState(false); // New state for password visibility
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (!formData.email || !formData.password) {
       toast.error('Please fill in all fields');
       return;
@@ -22,10 +24,10 @@ function Login() {
     try {
       const res = await login(formData);
       console.log(res);
-      if (res.data.success===true) {
+      if (res.data.success === true) {
         toast.success('Login successful!');
         // Add navigation logic here if needed
-        if(res.data.user.isAdmin===true){
+        if (res.data.user.isAdmin === true) {
           navigate('/admin')
         }
       } else {
@@ -35,7 +37,11 @@ function Login() {
       console.error('Error:', error);
       toast.error('Login failed. Please try again.');
     }
-  }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-gradient-to-br from-[#00A8E8] via-[#007EA7] to-[#FFD23F] overflow-hidden">
@@ -54,20 +60,28 @@ function Login() {
               className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A8E8] font-['Roboto']"
               placeholder="Enter your email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-[#343A40] mb-2 font-['Roboto']">
               Password
             </label>
-            <input
-              type="password"
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A8E8] font-['Roboto']"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'} // Toggle type based on state
+                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#00A8E8] font-['Roboto'] pr-10" // Added pr-10 for icon spacing
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              />
+              <span
+                className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-500"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />} {/* Toggle icon */}
+              </span>
+            </div>
             <div className="flex justify-end mt-2">
               <Link to="/forgot-password" className="text-sm text-[#00A8E8] hover:text-[#007EA7] font-['Roboto']">
                 Forgot Password?
@@ -89,7 +103,7 @@ function Login() {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
