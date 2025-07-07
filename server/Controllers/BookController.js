@@ -29,7 +29,9 @@ export const getAllBooks = async (req, res) => {
 
 export const addBook=async (req, res) => {
     try {
-        let { title, author, genre, publishedYear, description,price, stock } = req.body;
+
+        console.log(req.body)
+        let { title, author, genre, publishedYear, description,price, stock,rentalPrice } = req.body;
 
         const coverImage = req.file.path; // Assuming you are using multer to handle file uploads
         console.log(coverImage)
@@ -43,7 +45,8 @@ export const addBook=async (req, res) => {
                 description,
                 coverImage,
                 price,
-                stock
+                stock,
+                rentalPrice
             }
         );
         await book.save();

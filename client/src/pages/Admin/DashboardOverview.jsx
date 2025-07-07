@@ -10,13 +10,13 @@ function DashboardOverview() {
   const getUsers = async () => {
     try {
       const res = await getAllUsers(); // Assuming the response structure contains users in data.data
-      console.log("Users fetched successfully:", res.data.data);
+     
       const filterUser = res.data.data.filter((user) => {
         if (user.isAdmin !== true) {
           return user;
         }
       })
-      console.log("Filtered Users:", filterUser);
+     
       setAllUser(filterUser);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -26,14 +26,12 @@ function DashboardOverview() {
 
   const getBooks = async () => {
     const res = await getAllBooks(); // Assuming the response structure contains books in data.data
-    console.log("Books fetched successfully:", res.data.data)
     setAllBooks(res.data.data);
   }
 
   const getBorrowedBooks = async () => {
     try {
       const res = await getAllBorrowedBooks(); // Assuming the response structure contains borrowed books in data.data
-      console.log("Borrowed books fetched successfully:", res.data.data)
       setBorrowedBooks(res.data.data);
       // Process the borrowed books as needed
     } catch (error) {

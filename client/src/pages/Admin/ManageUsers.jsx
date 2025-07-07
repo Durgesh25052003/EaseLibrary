@@ -41,9 +41,9 @@ function ManageUsers() {
                     <div key={user._id} className="border rounded-lg p-4 shadow">
                         <div className="flex items-center gap-4 mb-4">
                             {user.profilePic && (
-                                <img 
-                                    src={user.profilePic} 
-                                    alt="Profile" 
+                                <img
+                                    src={user.profilePic}
+                                    alt="Profile"
                                     className="w-12 h-12 rounded-full object-cover"
                                 />
                             )}
@@ -62,9 +62,9 @@ function ManageUsers() {
                                             <p className="font-medium">{book.title}</p>
                                             <p className="text-sm text-gray-600">Author: {book.author}</p>
                                             <p className="text-sm text-gray-600">
-                                              Genre:{
-                                                book.genre
-                                              }
+                                                Genre:{
+                                                    book.genre
+                                                }
                                             </p>
                                             <p className="text-sm text-gray-600">
                                                 Rental Price:{

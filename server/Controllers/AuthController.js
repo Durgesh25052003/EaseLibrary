@@ -168,7 +168,7 @@ export const forgetPassword = async (req, res, next) => {
     // Encode the token for URL safety
     const encodedToken = encodeURIComponent(hashedEmail);
     const resetLink = `http://localhost:5173/reset-password/${encodedToken}`;
-    
+
     const sendForgetPasswordReset = new Email();
     await sendForgetPasswordReset.sendMailForgetPassword(
       email,
@@ -179,7 +179,7 @@ export const forgetPassword = async (req, res, next) => {
 
     user.token = hashedEmail;
     await user.save();
-    
+
     res.status(200).json({
       success: true,
       message: "Email sent successfully",
@@ -199,23 +199,22 @@ export const resetPassword = async (req, res, next) => {
     // Decode the token
     const decodedToken = decodeURIComponent(token);
     const user = await UserModel.findOne({ token: decodedToken });
-    
+
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User not found", 
-      }) 
+        message: "User not found",
+      });
     }
-    const { password } = req.body
-    
+    const { password } = req.body;
+
     user.password = password;
-    console.log(password,"password");
-  
+    console.log(password, "password");
+
     await user.save();
     res.status(200).json({
       success: true,
       message: "Password reset successfully",
     });
-
   } catch (error) {}
 };

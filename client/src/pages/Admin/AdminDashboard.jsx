@@ -8,9 +8,10 @@ function AdminDashboard() {
 
 
   const [ActiveTab, setActiveTab] = useState({
-    Active1: true,
+    Active1: false,
     Active2: false,
     Active3: false,
+    Active4: false
   })
 
 
@@ -40,6 +41,7 @@ function AdminDashboard() {
                       Active1: true,
                       Active2: false,
                       Active3: false,
+                      Active4: false
                     }
                   })
                 }}              >
@@ -56,6 +58,7 @@ function AdminDashboard() {
                       Active1: false,
                       Active2: true,
                       Active3: false,
+                      Active4: false
                     }
                   })
                 }}
@@ -66,13 +69,32 @@ function AdminDashboard() {
             <li className="mb-4">
               <Link
                 to="/admin/books"
-                className={`block py-2 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active3 ? "bg-white text-[#007EA7]" : ""}   transition-colors duration-200 font-['Roboto']`}
+                className={`block py-2 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active3 ? "bg-white text-[#007EA7]" : ""} transition-colors duration-200 font-['Roboto']`}
                 onClick={() => {
                   setActiveTab(() => {
                     return {
                       Active1: false,
                       Active2: false,
                       Active3: true,
+                      Active4: false
+                    }
+                  })
+                }}
+              >
+                Manage Books
+              </Link>
+            </li>
+            <li className="mb-4">
+              <Link
+                to="/admin/borrowedbooks"
+                className={`block py-2 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active4 ? "bg-white text-[#007EA7]" : ""}   transition-colors duration-200 font-['Roboto']`}
+                onClick={() => {
+                  setActiveTab(() => {
+                    return {
+                      Active1: false,
+                      Active2: false,
+                      Active3: false,
+                      Active4: true
                     }
                   })
                 }}

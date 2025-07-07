@@ -79,3 +79,12 @@ export const getAllBorrowedBooks = async () => {
         console.log(error)
     }
 }
+
+export const addBooks = async (formData) => {
+    try {
+        const res = await bookRoute.post("/add-book", formData);
+        return res;
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -7,7 +7,9 @@ import ResetPassword from './pages/Login/ResetPassword';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import DashboardOverview from './pages/Admin/DashboardOverview'; // Import the new component
 import ManageUsers from './pages/Admin/ManageUsers';
+import ManageBorrowedBooks from './pages/Admin/ManageBorrowedBooks';
 import ManageBooks from './pages/Admin/ManageBooks';
+import { ToastContainer } from 'react-toastify';
 
 const router = createBrowserRouter([
   {
@@ -39,8 +41,12 @@ const router = createBrowserRouter([
         element: <ManageUsers /> // Use the new component here
       },
       {
-        path: 'books', // /admin/books
+        path: "books",
         element: <ManageBooks />
+      },
+      {
+        path: 'borrowedbooks', // /admin/borrowedbooks
+        element: <ManageBorrowedBooks /> // Use the new component here
       }
     ]
   }
@@ -49,6 +55,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
+       <ToastContainer />
       <RouterProvider router={router} />
     </>
   )
