@@ -88,3 +88,15 @@ export const addBooks = async (formData) => {
         console.log(error)
     }
 }
+
+export const returnBook=async(userId,bookId)=>{
+    try {
+        const res = await userRoute.patch("/returnBook",{
+            userId,
+            bookId
+        });
+        return res;
+    } catch (error) {
+        console.log(error)
+    }
+}

@@ -1,11 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { getAllBooks, getAllBorrowedBooks, getAllUsers } from '../../Servies/servies';
+import NotificationList from '../../components/NotificationList';
+import {db} from "../../../Firebase/firebase"
+import {collection,getDocs} from "firebase/firestore"
+
 
 function DashboardOverview() {
 
   const [allUser, setAllUser] = useState([])
   const [allBooks, setAllBooks] = useState([])
   const [borrowedBooks, setBorrowedBooks] = useState([])
+  const [notifications, setNotifications] = useState([
+  ]);
+  
+  const fetchNotification=async()=>{
+    const querySnapshot = await getDocs(collection(db,"notifications"))
+    const notificationArray=querySnapshot.docs.map((doc) => {
+     return {...doc.data(),id:doc.id} 
+    });
+    console.log(notificationArray)
+    setNotifications(notificationArray);
+  }
+
+
+  useEffect(() => {
+    // Replace this with your Firebase listener logic
+    // Example: firebase.notifications.onSnapshot(...)
+    // setNotifications(newNotificationsFromFirebase)
+    fetchNotification();
+  }, []);
+
+  const removeNotification = (id) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
 
   const getUsers = async () => {
     try {
@@ -71,11 +98,7 @@ function DashboardOverview() {
       </div>
       <div className="mt-8">
         <h2 className="text-2xl font-bold text-[#343A40] mb-4">Recent Activity</h2>
-        <ul className="list-disc list-inside">
-          <li>User John Doe registered on 2023-10-26</li>
-          <li>Book "The Great Gatsby" added by Admin</li>
-          <li>User Jane Smith borrowed "1984"</li>
-        </ul>
+        <NotificationList notifications={notifications} onRemove={removeNotification} />
       </div>
     </div>
   );

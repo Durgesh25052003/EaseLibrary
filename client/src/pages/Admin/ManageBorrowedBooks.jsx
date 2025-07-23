@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllBorrowedBooks } from '../../Servies/servies';
+import { getAllBorrowedBooks ,returnBook} from '../../Servies/servies';
 
 function ManageBorrowedBooks() {
     const [borrowedBooks, setBorrowedBooks] = useState([]);
@@ -11,6 +11,7 @@ function ManageBorrowedBooks() {
             try {
                 const response = await getAllBorrowedBooks();
                 setBorrowedBooks(response.data.data);
+                console.log(response.data.data);
             } catch (err) {
                 console.error('Error fetching borrowed books:', err);
                 setError('Failed to fetch borrowed books.');
@@ -21,6 +22,18 @@ function ManageBorrowedBooks() {
         fetchBorrowedBooks();
     }, []);
 
+    const handleReturnBook=async(bookId,userId)=>{
+        try {
+            console.log(bookId,userId,"🌟🌟")
+            
+            const bookIdInt=Number(bookId);
+            const userIdInt=Number(userId);
+            const res= await returnBook(bookIdInt,userIdInt) 
+            console.log(res)
+        } catch (error) {
+            console.error('Error returning book:', error);
+        }
+    }
     console.log(borrowedBooks)
     if (loading) {
         return <div className="flex justify-center items-center h-screen bg-background text-text">Loading books...</div>;
@@ -58,7 +71,9 @@ function ManageBorrowedBooks() {
                             <p className="text-gray-700 mb-1"><strong>Return Date:</strong> {new Date(borrow.returnDate).toLocaleDateString()}</p>
                             {/* You can add more details or actions here, e.g., a button to mark as returned */}
                             <div className="mt-4 flex justify-end">
-                                <button className="bg-highlight text-text px-4 py-2 rounded-md hover:bg-yellow-400 transition-colors duration-200">
+                                <button className="bg-highlight text-text px-4 py-2 rounded-md hover:bg-yellow-400 transition-colors duration-200"
+                                onClick={()=>handleReturnBook(borrow.book,borrow.user._id)}
+                                >
                                     Mark as Returned
                                 </button>
                             </div>

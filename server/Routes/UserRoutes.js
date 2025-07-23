@@ -14,7 +14,7 @@ UserRouter.patch('/reset-password/:token',resetPassword)
 
 
 UserRouter.post('/borrowBook',protect,borrowBooks)
-UserRouter.post('/returnBook',protect,returnBooks)
+UserRouter.patch('/returnBook',protect,returnBooks)
 UserRouter.get('/getBorrowedBooks/:id',protect,getBorrowedBooks)
 UserRouter.get('/getAllUsers',protect,getAllUsers)
 UserRouter.get('/getBorrowedBooks',protect,getAllBorrowedBooks)

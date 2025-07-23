@@ -116,7 +116,7 @@ export const borrowBooks = async (req, res, next) => {
 
 export const returnBooks = async (req, res, next) => {
   try {
-    const userId = req.user._id;
+    const userId = req.body.userId;
     const bookId = req.body.bookId;
     console.log(userId, typeof bookId);
     const user = await UserModel.findById(userId);
