@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { BookRouter } from "../server/Routes/BookRoutes.js";
+import { BookRouter, ReviewRouter } from "../server/Routes/BookRoutes.js";
 import UserRouter from "./Routes/UserRoutes.js";
 import cookieParser from "cookie-parser";
 import { startDailyRemainder } from "./Cronjob/DailyRemainderEmail.js";
@@ -23,5 +23,6 @@ startDailyRemainder(); //CRON JOB
 
 app.use("/api/v1/books", BookRouter);
 app.use("/api/v1/users", UserRouter);
+app.use("/api/v1/reviews", ReviewRouter);
 
 export { app };

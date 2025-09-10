@@ -8,6 +8,10 @@ const bookRoute = new axios.create({
     baseURL: "http://localHost:3000/api/v1/books",
     withCredentials: true
 })
+const reviewRouter= new axios.create({
+    baseURL: "http://localHost:3000/api/v1/reviews",
+    withCredentials: true
+})
 
 export const login = async (user) => {
     try {
@@ -26,6 +30,26 @@ export const signUp = async (user) => {
         return res.data
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const getUserById = async (id) => {
+    try {
+        const res = await userRoute.get(`/getUser/${id}`)
+        return res;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const updateUserProfile = async (userData) => {
+    try {
+        const res = userRoute.patch("/profile",
+            userData
+        )
+        return res;
+    } catch (error) {
+        console.log(error)
     }
 }
 
@@ -53,6 +77,10 @@ export const resetPassword = async (password, token) => {
     }
 }
 
+
+
+
+
 export const getAllUsers = async () => {
     try {
         const res = await userRoute.get("/getAllUsers");
@@ -62,10 +90,26 @@ export const getAllUsers = async () => {
     }
 }
 
-export const getAllBooks = async () => {
+export const getAllBooks = async (page, limit, search) => {
     try {
-        const res = await bookRoute.get("/getAllBooks");
+        const res = await bookRoute.get("/getAllBooks", {
+            params: {
+                page,
+                limit,
+                search
+
+            }
+        });
         return res
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getBookById = async (id) => {
+    try {
+        const res = await bookRoute.get(`/getBookById/${id}`)
+        return res;
     } catch (error) {
         console.log(error)
     }
@@ -89,14 +133,95 @@ export const addBooks = async (formData) => {
     }
 }
 
-export const returnBook=async(userId,bookId)=>{
+export const returnBook = async (userId, bookId) => {
     try {
-        const res = await userRoute.patch("/returnBook",{
+        const res = await userRoute.post("/returnBook", {
             userId,
             bookId
         });
         return res;
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const borrowBook = async (bookId, days) => {
+    try {
+        const res = await userRoute.post('/borrowBook', {
+            bookId,
+            days
+        })
+        return res
+    } catch (error) {
+        console.log(error)
+
+    }
+}
+
+export const getBorrowedBooksByUser = async (userId) => {
+    try {
+        const res = await userRoute.get(`/getBorrowedBooks/${userId}`);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const addFavoriteBook = async (bookId) => {
+    try {
+        const res = await userRoute.post('/addFavorite', { bookId });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const removeFavoriteBook = async (bookId) => {
+    try {
+        const res = await userRoute.post('/removeFavorite', { bookId });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getFavoriteBooks = async () => {
+    try {
+        const res = await userRoute.get('/getFavorites');
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+
+export const verifyBorrowCode = async (borrowCode) => {
+    try {
+        const res = await userRoute.post('/verifyBorrowCode', { borrowCode });
+        return res;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+//Reviews
+
+export const addReview = async (reviewData) => {
+    try {
+        const res = await reviewRouter.post("/add-review", reviewData);
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const getReviews = async (bookId) => {
+    try {
+        const res = await reviewRouter.get(`/get-reviews/${bookId}`);
+        return res;
+    } catch (error) {
+        console.log(error);
     }
 }

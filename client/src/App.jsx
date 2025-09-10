@@ -1,5 +1,7 @@
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import SplashScreen from './components/SplashScreen';
 import Login from './pages/Login/Login';
 import Signup from './pages/Login/Signup';
 import ForgetPassword from './pages/Login/ForgetPassword/ForgetPassword';
@@ -10,6 +12,16 @@ import ManageUsers from './pages/Admin/ManageUsers';
 import ManageBorrowedBooks from './pages/Admin/ManageBorrowedBooks';
 import ManageBooks from './pages/Admin/ManageBooks';
 import { ToastContainer } from 'react-toastify';
+import UserDashboard from './pages/User/userDashboard';
+import UserDiscover from './pages/User/UserDiscover';
+import BookDesc from './pages/User/BookDescription';
+import BookDescription from './pages/User/BookDescription';
+import BorrowedBooks from './pages/User/BorrowedBooks';
+import Category from './pages/User/Category';
+import BorrowCodeVerification from './components/BorrowCodeVerification';
+import Profile from './pages/User/Profile';
+import EditProfile from './pages/User/EditProfile';
+import UserDetails from './pages/Admin/UserDetails';
 
 const router = createBrowserRouter([
   {
@@ -47,16 +59,64 @@ const router = createBrowserRouter([
       {
         path: 'borrowedbooks', // /admin/borrowedbooks
         element: <ManageBorrowedBooks /> // Use the new component here
+      },
+      {
+        path: 'borrowRequest',
+        element: <BorrowCodeVerification />
       }
     ]
+  },
+  {
+    path: '/admin/user/:userId',
+    element: <UserDetails />
+  },
+  {
+    path: '/user',
+    element: <UserDashboard />,
+    children: [
+      {
+        path: 'discover',
+        element: <UserDiscover />
+      }
+    ]
+  },
+  {
+    path: '/user/profile',
+    element: <Profile /> // View profile
+  },
+  {
+    path: '/user/edit',
+    element: <EditProfile /> // Edit profile
+  },
+  {
+    path: '/user/bookdesc/:bookId',
+    element: <BookDesc />
+  },
+  {
+    path: '/user/borrowedbooks',
+    element: <BorrowedBooks />
+  },
+  {
+    path: '/user/category',
+    element: <Category />
   }
 ])
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+
+  const handleLoadingComplete = () => {
+    setShowSplash(false);
+  };
+
   return (
     <>
-       <ToastContainer />
-      <RouterProvider router={router} />
+      <ToastContainer />
+      {showSplash ? (
+        <SplashScreen onLoadingComplete={handleLoadingComplete} />
+      ) : (
+        <RouterProvider router={router} />
+      )}
     </>
   )
 }

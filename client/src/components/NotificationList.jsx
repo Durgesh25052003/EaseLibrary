@@ -19,7 +19,7 @@ function NotificationList({ notifications, onRemove }) {
             exit="exit"
             variants={notificationVariants}
             transition={{ duration: 0.3 }}
-            className="bg-white border-l-4 border-primary shadow-lg rounded-md p-4 flex items-start gap-3"
+            className={`${notif.type==="Return"?"bg-red-200":"bg-green-200"} border-l-4 border-primary shadow-lg rounded-md p-4 flex items-start gap-3`}
           >
             <div className="flex-1">
               <div className="font-semibold text-primary">{notif.title}</div>

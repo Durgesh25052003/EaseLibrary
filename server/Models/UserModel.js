@@ -23,12 +23,18 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Book",
-      }
+      },
     ],
-    borrowedBooksCount:{
-      type:Number,
-      default:0,
+    borrowedBooksCount: {
+      type: Number,
+      default: 0,
     },
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Book",
+      },
+    ],
     isAdmin: {
       type: Boolean,
       default: false,
@@ -52,8 +58,6 @@ const userSchema = new mongoose.Schema(
 //   next()
 // })
 
-
-
 userSchema.pre("save", async function (next) {
   const password = this.password;
   const salt = await bcrypt.genSalt(10);
@@ -62,9 +66,9 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.methods.comparePassword=async function(enteredPassword){
-  return await bcrypt.compare(enteredPassword,this.password)
-}
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 const UserModel = mongoose.model("User", userSchema);
 

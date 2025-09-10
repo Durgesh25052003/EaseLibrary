@@ -218,3 +218,28 @@ export const resetPassword = async (req, res, next) => {
     });
   } catch (error) {}
 };
+
+const updateUserProfile = async (req, res, next) => {
+  try {
+    const { name, email, profilePic } = req.body;
+    const user = await UserModel.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    if (name) {
+      user.name = name;
+    }
+    if (email) {
+      user.email = email;
+    }
+    if (profilePic) {
+      user.profilePic = profilePic;
+    }
+    await user.save();
+  } catch (error) {
+    console.log(error);
+  }
+};

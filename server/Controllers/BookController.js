@@ -7,9 +7,20 @@ export const getAllBooks = async (req, res) => {
     try {
         const page= req.query.page?parseInt(req.query.page):1;
         const limit= req.query.limit?parseInt(req.query.limit):10;
-
+        const {search}=req.query;
+        const regex= new RegExp(search,'i');
+        let query={};
+        if(search){
+            query={
+                $or:[
+                    {title:regex},
+                    {author:regex},
+                    {genre:regex},
+                ]
+            }
+        }
         const skip=(page-1)*limit;
-        const book=await BookModel.find({}).skip(skip).limit(limit);
+        const book=await BookModel.find(query).skip(skip).limit(limit);
         if(!book){
             return res.status(404).json({
                 success:false,
@@ -117,7 +128,8 @@ export const deleteBook=async (req, res,next) => {
     }
 }
 
-export const getSingleBook=async (req, res) => {
+export const getBookById=async (req, res) => {
+
     try {
         const book=await BookModel.findById(req.params.id);
         if(!book){
