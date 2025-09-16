@@ -225,3 +225,25 @@ export const getReviews = async (bookId) => {
         console.log(error);
     }
 }
+
+// updating history
+
+export const updateHistory=async (bookId)=>{
+    try {
+        const res=await userRoute.post("/addHistory",{
+            bookId
+        })
+        return res
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getHistory=async()=>{
+    try {
+        const res=await userRoute.get("/getHistory")
+        return res
+    } catch (error) {
+        console.log(error)
+    }
+}

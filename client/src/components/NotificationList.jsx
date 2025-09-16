@@ -24,6 +24,7 @@ function NotificationList({ notifications, onRemove }) {
             <div className="flex-1">
               <div className="font-semibold text-primary">{notif.title}</div>
               <div className="text-black text-sm">{notif.message}</div>
+              <div className="text-black text-sm">{notif.date}</div>
             </div>
             <button
               onClick={() => onRemove(notif.id)}

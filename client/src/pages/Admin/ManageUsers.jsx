@@ -156,7 +156,7 @@ function ManageUsers() {
                                             </div>
                                             <div className="text-right">
                                                 <div className="bg-white/20 rounded-full px-3 py-1">
-                                                    <span className="text-sm font-bold">{userBooks.length}</span>
+                                                    <span className="text-sm font-bold">{user.borrowedBooks.length}</span>
                                                 </div>
                                                 <p className="text-xs text-blue-100">Books</p>
                                             </div>

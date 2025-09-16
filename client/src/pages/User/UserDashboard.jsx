@@ -8,7 +8,8 @@ import {
     faHeart,
     faCog,
     faSearch,
-    faPerson
+    faPerson,
+    faClock
 } from '@fortawesome/free-solid-svg-icons';
 
 function UserDashboard() {
@@ -45,10 +46,10 @@ function UserDashboard() {
                     </li>
                     <li className='hover:bg-[#007EA7] px-5 py-2 w-50 border-0 rounded-md '>
                         <Link
-                            to="/user"
+                            to="/user/history"
                             className='text-[#fff] text-[18px] font-["Poppins"] font-bold flex items-center gap-2 cursor-pointer'
                         >
-                            <FontAwesomeIcon icon={faHeart} /> Favourites
+                            <FontAwesomeIcon icon={faClock} /> History
                         </Link>
                     </li>
                     <li className='hover:bg-[#007EA7] px-5 py-2 w-50 border-0 rounded-md '>

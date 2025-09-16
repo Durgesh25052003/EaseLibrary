@@ -47,6 +47,18 @@ const userSchema = new mongoose.Schema(
     token: {
       type: String,
     },
+    history: [
+      {
+        book: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Book",
+        },
+        accessedAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

@@ -16,7 +16,7 @@ function AdminDashboard() {
   const isAdmin = true; // This should come from user authentication data
 
   const [ActiveTab, setActiveTab] = useState({
-    Active1: false,
+    Active1: true,
     Active2: false,
     Active3: false,
     Active4: false,

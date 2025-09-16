@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { FiCalendar, FiUser, FiBook, FiClock, FiAlertTriangle, FiCheckCircle, FiMail, FiRefreshCw } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import Lottie from "lottie-react";
-import Emptybox from "../../../public/Emptybox.json?url";
+import Emptybox from "../../../public/Emptybox.json";
 
 function ManageBorrowedBooks() {
     const [borrowedBooks, setBorrowedBooks] = useState([]);

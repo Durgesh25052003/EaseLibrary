@@ -11,7 +11,7 @@ function ManageBooks() {
     const [selectedGenre, setSelectedGenre] = useState('all');
     const [stockFilter, setStockFilter] = useState('all');
     const [showAddForm, setShowAddForm] = useState(false);
-    
+
     const [newBook, setNewBook] = useState({
         title: '',
         author: '',
@@ -44,13 +44,13 @@ function ManageBooks() {
     const filteredBooks = useMemo(() => {
         return books.filter(book => {
             const matchesSearch = book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                 book.author.toLowerCase().includes(searchTerm.toLowerCase());
+                book.author.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesGenre = selectedGenre === 'all' || book.genre === selectedGenre;
             const matchesStock = stockFilter === 'all' ||
-                               (stockFilter === 'available' && book.stock > 0) ||
-                               (stockFilter === 'low' && book.stock <= 5 && book.stock > 0) ||
-                               (stockFilter === 'out' && book.stock === 0);
-            
+                (stockFilter === 'available' && book.stock > 0) ||
+                (stockFilter === 'low' && book.stock <= 5 && book.stock > 0) ||
+                (stockFilter === 'out' && book.stock === 0);
+
             return matchesSearch && matchesGenre && matchesStock;
         });
     }, [books, searchTerm, selectedGenre, stockFilter]);
@@ -69,7 +69,7 @@ function ManageBooks() {
             toast.success('Book added successfully!');
             setShowAddForm(false);
             setNewBook({
-                title: '', author: '', description: '', genre: '', 
+                title: '', author: '', description: '', genre: '',
                 publishedYear: '', price: '', stock: '', rentalPrice: '', coverImage: null
             });
             fetchBooks();
@@ -99,12 +99,12 @@ function ManageBooks() {
                     <div className="animate-pulse">
                         <div className="h-8 bg-gray-200 rounded w-48 mb-6"></div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                            {[1,2,3,4].map(i => (
+                            {[1, 2, 3, 4].map(i => (
                                 <div key={i} className="h-24 bg-gray-200 rounded-lg"></div>
                             ))}
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {[1,2,3,4,5,6].map(i => (
+                            {[1, 2, 3, 4, 5, 6].map(i => (
                                 <div key={i} className="h-64 bg-gray-200 rounded-lg"></div>
                             ))}
                         </div>
@@ -118,7 +118,7 @@ function ManageBooks() {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-yellow-50 p-4 md:p-6">
             <div className="max-w-7xl mx-auto">
                 {/* Hero Section */}
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="bg-gradient-to-r from-[#00A8E8] via-[#00A8E8] to-yellow-400 rounded-2xl p-8 mb-8 text-white"
@@ -129,7 +129,7 @@ function ManageBooks() {
 
                 {/* Quick Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
@@ -143,7 +143,7 @@ function ManageBooks() {
                         </div>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.1 }}
@@ -158,7 +158,7 @@ function ManageBooks() {
                         </div>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2 }}
@@ -173,7 +173,7 @@ function ManageBooks() {
                         </div>
                     </motion.div>
 
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.3 }}
@@ -203,7 +203,7 @@ function ManageBooks() {
                                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 />
                             </div>
-                            
+
                             <select
                                 value={selectedGenre}
                                 onChange={(e) => setSelectedGenre(e.target.value)}
@@ -251,7 +251,7 @@ function ManageBooks() {
                                     type="text"
                                     placeholder="Title"
                                     value={newBook.title}
-                                    onChange={(e) => setNewBook({...newBook, title: e.target.value})}
+                                    onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                     required
                                 />
@@ -259,7 +259,7 @@ function ManageBooks() {
                                     type="text"
                                     placeholder="Author"
                                     value={newBook.author}
-                                    onChange={(e) => setNewBook({...newBook, author: e.target.value})}
+                                    onChange={(e) => setNewBook({ ...newBook, author: e.target.value })}
                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                     required
                                 />
@@ -267,28 +267,28 @@ function ManageBooks() {
                                     type="text"
                                     placeholder="Genre"
                                     value={newBook.genre}
-                                    onChange={(e) => setNewBook({...newBook, genre: e.target.value})}
+                                    onChange={(e) => setNewBook({ ...newBook, genre: e.target.value })}
                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                                 <input
                                     type="number"
                                     placeholder="Published Year"
                                     value={newBook.publishedYear}
-                                    onChange={(e) => setNewBook({...newBook, publishedYear: e.target.value})}
+                                    onChange={(e) => setNewBook({ ...newBook, publishedYear: e.target.value })}
                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                                 <input
                                     type="number"
                                     placeholder="Price"
                                     value={newBook.price}
-                                    onChange={(e) => setNewBook({...newBook, price: e.target.value})}
+                                    onChange={(e) => setNewBook({ ...newBook, price: e.target.value })}
                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                                 <input
                                     type="number"
                                     placeholder="Stock"
                                     value={newBook.stock}
-                                    onChange={(e) => setNewBook({...newBook, stock: e.target.value})}
+                                    onChange={(e) => setNewBook({ ...newBook, stock: e.target.value })}
                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                     required
                                 />
@@ -296,13 +296,13 @@ function ManageBooks() {
                                     type="number"
                                     placeholder="Rental Price"
                                     value={newBook.rentalPrice}
-                                    onChange={(e) => setNewBook({...newBook, rentalPrice: e.target.value})}
+                                    onChange={(e) => setNewBook({ ...newBook, rentalPrice: e.target.value })}
                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                                 <textarea
                                     placeholder="Description"
                                     value={newBook.description}
-                                    onChange={(e) => setNewBook({...newBook, description: e.target.value})}
+                                    onChange={(e) => setNewBook({ ...newBook, description: e.target.value })}
                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 md:col-span-2"
                                     rows="3"
                                     required
@@ -311,7 +311,7 @@ function ManageBooks() {
                                     <input
                                         type="file"
                                         accept="image/*"
-                                        onChange={(e) => setNewBook({...newBook, coverImage: e.target.files[0]})}
+                                        onChange={(e) => setNewBook({ ...newBook, coverImage: e.target.files[0] })}
                                         className="px-4 py-2 border border-gray-300 rounded-lg"
                                     />
                                 </div>
@@ -352,12 +352,12 @@ function ManageBooks() {
                                             </div>
                                         )}
                                     </div>
-                                    
+
                                     <div className="p-4">
                                         <h3 className="font-bold text-lg text-gray-900 mb-1 line-clamp-1">{book.title}</h3>
                                         <p className="text-sm text-gray-600 mb-2">by {book.author}</p>
                                         <p className="text-xs text-gray-500 mb-3">{book.genre}</p>
-                                        
+
                                         <div className="flex items-center justify-between mb-3">
                                             <span className={`text-sm font-medium ${stockStatus.color}`}>
                                                 {stockStatus.label}

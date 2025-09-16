@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { borrowBook, getBookById, getReviews } from '../../Servies/servies';
+import { borrowBook, getBookById, getReviews, updateHistory } from '../../Servies/servies';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faStar, faCalendar, faUser, faBook, faTag, faInfoCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { faClock, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
@@ -19,9 +19,9 @@ const BookDescription = () => {
   const [error, setError] = useState(null);
   const [rentalDays, setRentalDays] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [Reviews,setReviews] = useState([]);
+  const [Reviews, setReviews] = useState([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
-  const ratingAverage= useRef(0)
+  const ratingAverage = useRef(0)
   let [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -64,12 +64,12 @@ const BookDescription = () => {
       console.log("Review response:", res);
       setReviews(res.data);
       console.log(res.data)
-      if(res.data.length>0){
-        ratingAverage.current=res.data.reduce((acc,cur)=>{
-        return cur.rating+acc
-       },0)
-       ratingAverage.current=ratingAverage.current/res.data.length
-       console.log(ratingAverage.current)
+      if (res.data.length > 0) {
+        ratingAverage.current = res.data.reduce((acc, cur) => {
+          return cur.rating + acc
+        }, 0)
+        ratingAverage.current = ratingAverage.current / res.data.length
+        console.log(ratingAverage.current)
       }
       setTimeout(() => console.log("Reviews state:", Reviews), 0);
     } catch (error) {
@@ -95,6 +95,9 @@ const BookDescription = () => {
       console.log(user)
       if (res?.data?.success) {
         toast.success('Book borrowed successfully');
+        //Updating the History
+        const resHistory=await updateHistory(bookId)
+        console.log(resHistory,"🌟🌟🌟");
       } else {
         toast.error('Book is already Borrowed');
       }
@@ -335,7 +338,7 @@ const BookDescription = () => {
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex items-center justify-center">
               <div className="text-center">
-                <div className="text-6xl font-bold text-gray-800 mb-2">{ratingAverage.current }</div>
+                <div className="text-6xl font-bold text-gray-800 mb-2">{ratingAverage.current}</div>
                 <div className="flex items-center justify-center gap-1 mb-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <FontAwesomeIcon
@@ -355,7 +358,7 @@ const BookDescription = () => {
                 const ratingCount = Reviews.filter(review => review.rating === rating).length;
                 // Calculate percentage (avoid division by zero)
                 const percentage = Reviews.length > 0 ? Math.round((ratingCount / Reviews.length) * 100) : 0;
-                
+
                 return (
                   <div key={rating} className="flex items-center gap-4">
                     <div className="flex items-center gap-1 w-24">
@@ -413,7 +416,7 @@ const BookDescription = () => {
           {/* View All Reviews Button */}
           <div className="p-6 bg-gray-50">
             {Reviews && Reviews.length > 3 && (
-              <button 
+              <button
                 onClick={() => setShowAllReviews(!showAllReviews)}
                 className="w-full bg-gradient-to-r from-[#00A8E8] to-[#007EA7] text-white py-3 px-6 rounded-lg hover:from-[#007EA7] hover:to-[#00A8E8] transition-all duration-300 font-semibold"
               >

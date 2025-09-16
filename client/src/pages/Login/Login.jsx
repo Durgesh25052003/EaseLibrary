@@ -31,7 +31,7 @@ function Login() {
         toast.success('Login successful!');
         if (res.data.user.isAdmin === true) {
           sessionStorage.setItem("user", JSON.stringify(res.data.user));
-          navigate('/admin');
+          navigate('/admin/dashboard');
         } else {
           sessionStorage.setItem("user", JSON.stringify(res.data.user));
           navigate('/user/discover');
@@ -54,7 +54,7 @@ function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#00A8E8] via-[#007EA7] to-[#FFD23F] ">
       <Toaster position="top-center" reverseOrder={false} />
-      
+
       {/* Animated background elements */}
       <div className="absolute inset-0">
         <motion.div

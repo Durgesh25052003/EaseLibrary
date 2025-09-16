@@ -559,3 +559,59 @@ export const verifyBorrowCode = async (req, res, next) => {
     });
   }
 };
+
+export const getHistory=async(req,res,next)=>{
+  try {
+    const userId=req.user._id
+    const user=await UserModel.findById(userId).populate("history.book")
+    console.log(user,"🌟🌟🌟");
+
+    user.history.sort((a,b)=>new Date(b.accessedAt)-new Date(a.accessedAt));
+    const history=user.history.map((item)=>{
+      return{
+        book:item.book,
+        accessedAt:item.accessedAt
+      }
+    })
+    console.log(history,"🌟🌟🌟");
+    res.status(200).json({
+      success: true,
+      message: "History fetched successfully",
+      data: history,
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+export const addHistory=async(req,res,next)=>{
+  try {
+    const bookId=req.body.bookId
+    const userId=req.user._id
+    const user=await UserModel.findById(userId)
+
+    const existingBook=user.history.find((item)=>item.book.equals(bookId));
+    if(existingBook){
+      existingBook.accessedAt= new Date()
+      await user.save()
+      return res.status(200).json({
+        success: true,
+        message: "History updated successfully",
+      })
+    }
+    
+    user.history .push({
+      book:bookId,
+      accessedAt:new Date()
+    })
+    await user.save()
+    res.status(200).json({
+      success: true,
+      message: "History added successfully",
+    })
+    next()
+  } catch (error) {
+    console.log(error)
+  }
+}

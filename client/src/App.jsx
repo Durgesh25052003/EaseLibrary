@@ -1,5 +1,5 @@
 import './App.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import SplashScreen from './components/SplashScreen';
 import Login from './pages/Login/Login';
@@ -22,6 +22,9 @@ import BorrowCodeVerification from './components/BorrowCodeVerification';
 import Profile from './pages/User/Profile';
 import EditProfile from './pages/User/EditProfile';
 import UserDetails from './pages/Admin/UserDetails';
+import { FullScreenLoading } from './components/LoadingBar';
+import UserHistory from './pages/User/UserHistory';
+
 
 const router = createBrowserRouter([
   {
@@ -77,6 +80,10 @@ const router = createBrowserRouter([
       {
         path: 'discover',
         element: <UserDiscover />
+      },
+      {
+        path: 'history',
+        element: <UserHistory />
       }
     ]
   },
@@ -102,8 +109,12 @@ const router = createBrowserRouter([
   }
 ])
 
+
+
+
 function App() {
   const [showSplash, setShowSplash] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLoadingComplete = () => {
     setShowSplash(false);
@@ -115,7 +126,10 @@ function App() {
       {showSplash ? (
         <SplashScreen onLoadingComplete={handleLoadingComplete} />
       ) : (
-        <RouterProvider router={router} />
+        <>
+          <FullScreenLoading isLoading={isLoading} type="spinner" text="Loading content..." />
+          <RouterProvider router={router} />
+        </>
       )}
     </>
   )

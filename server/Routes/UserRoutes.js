@@ -18,6 +18,8 @@ import {
   getUserById,
   verifyBorrowCode,
   updateUserProfile,
+  addHistory,
+  getHistory,
 } from "../Controllers/UserController.js";
 import upload from "../utils/multer.js";
 
@@ -39,6 +41,8 @@ UserRouter.get("/getBorrowedBooks", protect, getAllBorrowedBooks);
 UserRouter.post("/addFavorite", protect, addFavorite);
 UserRouter.post("/removeFavorite", protect, removeFavorite);
 UserRouter.get("/getFavorites", protect, getFavorites);
+UserRouter.post("/addHistory",protect,addHistory)
+UserRouter.get("/getHistory",protect,getHistory)
 
 // Profile management routes
 
