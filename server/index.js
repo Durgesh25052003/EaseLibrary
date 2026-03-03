@@ -7,9 +7,7 @@ import "../server/utils/Passport.js";
 
 config({ path: "./.env" });
 
-const DB_raw = process.env.MONGO_URI;
-
-const DB = DB_raw.replace("<db_password>", process.env.DB_PASSWORD);
+const DB = process.env.MONGO_URI;
 
 connect(DB).then(() => {
   console.log("Connected to MongoDB");
