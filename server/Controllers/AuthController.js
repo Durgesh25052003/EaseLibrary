@@ -2,7 +2,6 @@ import UserModel from "../Models/UserModel.js";
 import jwt from "jsonwebtoken";
 import Email from "../../server/utils/Email.js"; // Remove the curly braces
 import bcrypt from "bcryptjs";
-import { useReducer } from "react";
 
 const createToken = (user) => {
   return jwt.sign(
