@@ -1,13 +1,11 @@
 import express from "express";
 import { connect } from "mongoose";
 
-import { config as envConfig } from "dotenv";
+import { config } from "dotenv";
 import { app } from "../server/app.js";
 import "../server/utils/Passport.js";
 
-config({
-  path: "../server/.env",
-});
+config({ path: "./.env" });
 
 const DB_raw = process.env.DB_STRING;
 
