@@ -2,10 +2,21 @@ import UserModel from "../Models/UserModel.js";
 import BorrowModel from "../Models/BorrowModel.js";
 import { BookModel } from "../Models/BookModel.js";
 import Email from "../utils/Email.js";
+import mongoose from "mongoose";
 
+let bookId;
 export const getUserById = async (req, res, next) => {
   try {
-    const userId = req.params.id;
+    const userIdParam = req.params.id;
+    const userId = userIdParam || (req.user?._id && req.user._id.toString());
+
+    if (!userId || !mongoose.isValidObjectId(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user id",
+      });
+    }
+
     const user = await UserModel.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -26,7 +37,8 @@ export const getUserById = async (req, res, next) => {
 export const borrowBooks = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const { bookId, days } = req.body;
+    const { days } = req.body;
+    bookId = req.body.bookId;
     const user = await UserModel.findById(userId).populate("borrowedBooks");
     if (!user) {
       return res.status(404).json({
@@ -74,10 +86,8 @@ export const borrowBooks = async (req, res, next) => {
         message: "Invalid number of days",
       });
     }
-    user.borrowedBooks.push(bookId);
-    user.borrowedBooksCount++;
+
     book.stock--;
-    await user.save();
     await book.save();
 
     if (user.borrowedBooksCount >= book.stock) {
@@ -107,11 +117,12 @@ export const borrowBooks = async (req, res, next) => {
       borrowDate,
       returnDate: returnDate.toISOString().split("T")[0],
       amountPaid: price,
-      borrowCode: Math.floor(100000 + Math.random() * 900000), // Add this line
+      borrowCode: Math.floor(100000 + Math.random() * 900000),
       days,
     });
+    console.log(borrow);
     await borrow.save();
-    //Send email notification
+    //Sends email notification
 
     const email = new Email();
     email.sendMailBookBorrowed(
@@ -121,6 +132,7 @@ export const borrowBooks = async (req, res, next) => {
       book.title,
       book.author,
       borrowDate,
+      borrow.borrowCode,
       returnDate.toISOString().split("T")[0]
     );
 
@@ -142,9 +154,9 @@ export const returnBooks = async (req, res, next) => {
   try {
     const userId = req.body.userId;
     const bookId = req.body.bookId;
-    console.log("🌟🌟🌟", userId, bookId);
+    const role = req.body.role;
+    console.log(role);
     const user = await UserModel.findById(userId);
-    console.log(user);
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -152,18 +164,20 @@ export const returnBooks = async (req, res, next) => {
       });
     }
     // Check if the book is in the user's borrowed books
-    const bookIndex = user.borrowedBooks.indexOf(bookId);
-    if (bookIndex > -1) {
-      user.borrowedBooks.splice(bookIndex, 1);
-      user.borrowedBooksCount--;
-    } else {
-      return res.status(404).json({
-        success: false,
-        message: "Book not found in borrowed books",
-      });
+    if (role === "user") {
+      const bookIndex = user.borrowedBooks.indexOf(bookId);
+      console.log(bookIndex);
+      if (bookIndex > -1) {
+        user.borrowedBooks.splice(bookIndex, 1);
+        user.borrowedBooksCount--;
+      } else {
+        return res.status(404).json({
+          success: false,
+          message: "Book not found in borrowed books",
+        });
+      }
+      await user.save();
     }
-    await user.save();
-
     // Find the book and increase its stock
     const book = await BookModel.findById(bookId);
 
@@ -173,8 +187,10 @@ export const returnBooks = async (req, res, next) => {
         message: "Book not found",
       });
     }
-    book.stock++;
-    await book.save();
+    if (role !== "user") {
+      book.stock++;
+      await book.save();
+    }
 
     //Removing returned Book data from BorrowedBook Model
     const borrowedBooks = await BorrowModel.find({
@@ -185,8 +201,14 @@ export const returnBooks = async (req, res, next) => {
     console.log(borrowedBooks[0]);
     const borrowedBookId = borrowedBooks[0]._id;
 
-    await BorrowModel.findByIdAndDelete(borrowedBookId);
+    // deleting borrowed book from the user
+    // user.borrowedBooks.pull(borrowedBookId);
+    // await user.save();
 
+    if (role === "admin") {
+      console.log("Book returned successfully");
+      await BorrowModel.findByIdAndDelete(borrowedBookId);
+    }
     res.status(200).json({
       success: true,
       message: "Book returned successfully",
@@ -510,7 +532,15 @@ export const updatePassword = async (req, res) => {
 export const verifyBorrowCode = async (req, res, next) => {
   try {
     const { borrowCode } = req.body;
-
+    console.log(borrowCode);
+    const userId = req.user._id;
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
     if (!borrowCode) {
       return res.status(400).json({
         success: false,
@@ -526,16 +556,21 @@ export const verifyBorrowCode = async (req, res, next) => {
       .populate("user", "name email")
       .populate("book", "title author coverImage");
 
+    console.log(borrowRequest);
     if (!borrowRequest) {
       return res.status(404).json({
         success: false,
         message: "Invalid borrow code or request not found",
       });
     }
-   // change status to borrow
+    // change status to borrow
     await borrowRequest.updateOne({ status: "borrowed" });
     await borrowRequest.save();
-    
+    // add book to user borrowed books
+    user.borrowedBooks.push(bookId);
+    user.borrowedBooksCount++;
+    await user.save();
+
     console.log(borrowRequest);
 
     res.status(200).json({
@@ -560,58 +595,81 @@ export const verifyBorrowCode = async (req, res, next) => {
   }
 };
 
-export const getHistory=async(req,res,next)=>{
+export const getHistory = async (req, res, next) => {
   try {
-    const userId=req.user._id
-    const user=await UserModel.findById(userId).populate("history.book")
-    console.log(user,"🌟🌟🌟");
+    const userId = req.user._id;
+    const user = await UserModel.findById(userId).populate("history.book");
+    console.log(user, "🌟🌟🌟");
 
-    user.history.sort((a,b)=>new Date(b.accessedAt)-new Date(a.accessedAt));
-    const history=user.history.map((item)=>{
-      return{
-        book:item.book,
-        accessedAt:item.accessedAt
-      }
-    })
-    console.log(history,"🌟🌟🌟");
+    user.history.sort(
+      (a, b) => new Date(b.accessedAt) - new Date(a.accessedAt)
+    );
+    const history = user.history.map((item) => {
+      return {
+        book: item.book,
+        accessedAt: item.accessedAt,
+      };
+    });
+    console.log(history, "🌟🌟🌟");
     res.status(200).json({
       success: true,
       message: "History fetched successfully",
       data: history,
-    })
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
-
-export const addHistory=async(req,res,next)=>{
+export const addHistory = async (req, res, next) => {
   try {
-    const bookId=req.body.bookId
-    const userId=req.user._id
-    const user=await UserModel.findById(userId)
+    const bookId = req.body.bookId;
+    const userId = req.user._id;
+    const user = await UserModel.findById(userId);
 
-    const existingBook=user.history.find((item)=>item.book.equals(bookId));
-    if(existingBook){
-      existingBook.accessedAt= new Date()
-      await user.save()
+    const existingBook = user.history.find((item) => item.book.equals(bookId));
+    if (existingBook) {
+      existingBook.accessedAt = new Date();
+      await user.save();
       return res.status(200).json({
         success: true,
         message: "History updated successfully",
-      })
+      });
     }
-    
-    user.history .push({
-      book:bookId,
-      accessedAt:new Date()
-    })
-    await user.save()
+
+    user.history.push({
+      book: bookId,
+      accessedAt: new Date(),
+    });
+    await user.save();
     res.status(200).json({
       success: true,
       message: "History added successfully",
-    })
-    next()
+    });
+    next();
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
+
+// export const verifyBorrowedBookCode = async (req, res) => {
+//   try {
+//     const { borrowCode } = req.body;
+//     if (!borrowCode) {
+//       return res.status(400).json({ success: false, message: "Borrow code required" });
+//     }
+//     const borrow = await BorrowModel.findOne({ borrowCode });
+//     if (!borrow) {
+//       return res.status(404).json({ success: false, message: "Invalid borrow code" });
+//     }
+//     if (borrow.isVerified) {
+//       return res.status(200).json({ success: true, message: "Already verified" });
+//     }
+//     borrow.isVerified = true;
+//     await borrow.save();
+//     return res.status(200).json({ success: true, message: "Borrow code verified" });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({ success: false, message: "Internal server error" });
+//   }
+// };

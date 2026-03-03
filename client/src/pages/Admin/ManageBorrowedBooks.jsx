@@ -19,8 +19,8 @@ function ManageBorrowedBooks() {
     const fetchBorrowedBooks = async () => {
         try {
             const response = await getAllBorrowedBooks();
-            // Fixed: Ensure we always have an array, even when API returns null/undefined
             const booksData = response?.data?.data || [];
+            console.log('Fetched borrowed books:', booksData);
             setBorrowedBooks(Array.isArray(booksData) ? booksData : []);
         } catch (err) {
             console.error('Error fetching borrowed books:', err);
@@ -74,7 +74,7 @@ function ManageBorrowedBooks() {
 
     const handleReturnBook = async (userId, bookId) => {
         try {
-            await returnBook(userId, bookId);
+            await returnBook(userId, bookId, "admin");
             toast.success('Book marked as returned successfully!');
             fetchBorrowedBooks();
         } catch (error) {

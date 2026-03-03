@@ -4,6 +4,7 @@ import { login } from '../../Servies/servies';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash, FaBook, FaGraduationCap } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
 import { motion } from 'framer-motion';
 
 function Login() {
@@ -185,6 +186,28 @@ function Login() {
               )}
             </motion.button>
           </form>
+
+          {/* Divider */}
+          <div className="flex items-center my-6">
+            <div className="flex-1 h-px bg-white/20" />
+            <span className="px-4 text-blue-200 text-sm">or continue with</span>
+            <div className="flex-1 h-px bg-white/20" />
+          </div>
+
+          {/* Google Sign-In Button (UI-only) */}
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.85 }}
+            type="button"
+            className="w-full py-3 bg-gradient-to-r from-blue-500 to-cyan-400 text-white rounded-lg font-semibold hover:from-blue-600 hover:to-cyan-500 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-3"
+            onClick={()=>{
+              window.open(`http://localhost:3000/api/v1/users/google`,"_self");
+            }}
+          >
+            <FcGoogle className="w-6 h-6" />
+            Sign in with Google
+          </motion.button>
 
           <motion.p
             initial={{ opacity: 0 }}

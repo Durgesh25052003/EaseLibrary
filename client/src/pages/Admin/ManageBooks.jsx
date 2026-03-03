@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { getAllBooks, addBooks } from '../../Servies/servies';
+import { getAllBooks, addBooks, updateBook, getBookById } from '../../Servies/servies';
 import { toast } from 'react-toastify';
-import { FiBook, FiPlus, FiSearch, FiFilter, FiEdit3, FiTrash2, FiEye, FiTrendingUp, FiAlertTriangle, FiPackage } from 'react-icons/fi';
+import { FiBook, FiPlus, FiSearch, FiFilter, FiEdit3, FiTrash2, FiEye, FiTrendingUp, FiAlertTriangle, FiPackage, FiEdit } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
+import { BookUpdateForm } from '../../components/BookUpdateForm';
 
 function ManageBooks() {
     const [books, setBooks] = useState([]);
@@ -11,6 +12,18 @@ function ManageBooks() {
     const [selectedGenre, setSelectedGenre] = useState('all');
     const [stockFilter, setStockFilter] = useState('all');
     const [showAddForm, setShowAddForm] = useState(false);
+    const [editingForm, setEditingForm] = useState(false);
+    const [BookNewData, setBookNewData] = useState({
+        title: "",
+        author: "",
+        description: "",
+        genre: "",
+        stock: "",
+        rentalPrice: "",
+        price: ""
+    })
+    const [CurrentBook, setCurrentBook] = useState({})
+
 
     const [newBook, setNewBook] = useState({
         title: '',
@@ -79,6 +92,36 @@ function ManageBooks() {
         }
     };
 
+    const handleEditBook = async (bookId, book) => {
+        try {
+            console.log(book, BookNewData, "🌟🌟🌟")
+            console.log(bookId, "🌟🌟🌟")
+            const res = await updateBook(BookNewData, bookId);
+            console.log(res)
+            if (res.data.success) {
+                toast.success('Book updated successfully!');
+                fetchBooks();
+            }
+        } catch (error) {
+            toast.error('Failed to update book');
+            console.log(error)
+        }
+    }
+
+    const handleEditForm = async (bookId) => {
+        try {
+            const res = await getBookById(bookId);
+            if (res.data.success) {
+                console.log(res.data.data)
+                setCurrentBook(res.data.data)
+            }
+            setEditingForm(true)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const getStockStatus = (stock) => {
         if (stock === 0) return { color: 'text-red-500', bg: 'bg-red-50', label: 'Out of Stock' };
         if (stock <= 5) return { color: 'text-orange-500', bg: 'bg-orange-50', label: 'Low Stock' };
@@ -114,17 +157,26 @@ function ManageBooks() {
         );
     }
 
+    if (editingForm) {
+        return (<BookUpdateForm onUpdate={handleEditBook} onCancel={() => setEditingForm(false)} setBookNewData={setBookNewData} BookNewData={BookNewData} updateBook={handleEditBook} book={CurrentBook}
+            className="absolute"
+        />)
+    }
+
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-yellow-50 p-4 md:p-6">
+        <div className=" relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-yellow-50 p-4 ">
             <div className="max-w-7xl mx-auto">
                 {/* Hero Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-gradient-to-r from-[#00A8E8] via-[#00A8E8] to-yellow-400 rounded-2xl p-8 mb-8 text-white"
+                    className="bg-gradient-to-r from-[#00A8E8] via-[#00A8E8] to-yellow-400 text-white rounded-2xl mx-2 mb-4"
                 >
-                    <h1 className="text-4xl font-bold mb-2">Manage Books</h1>
-                    <p className="text-blue-100 text-lg">Manage your library collection with ease</p>
+                    <div className="max-w-7xl mx-auto px-8 py-12">
+                        <h1 className="text-4xl font-bold mb-2">Manage Books</h1>
+                        <p className="text-blue-100 text-lg">Manage your library collection with ease</p>
+                    </div>
                 </motion.div>
 
                 {/* Quick Stats */}
@@ -337,8 +389,9 @@ function ManageBooks() {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
-                                    className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
+                                    className=" relative bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
                                 >
+
                                     <div className="aspect-w-16 aspect-h-9 bg-gray-100">
                                         {book.coverImage ? (
                                             <img
@@ -351,6 +404,12 @@ function ManageBooks() {
                                                 <FiBook className="w-16 h-16 text-gray-400" />
                                             </div>
                                         )}
+                                        <div className="absolute top-2 right-2">
+                                            <FiEdit className="w-5 h-5 text-gray-600 cursor-pointer hover:text-gray-800" onClick={
+                                                () => handleEditForm(book._id)
+
+                                            } />
+                                        </div>
                                     </div>
 
                                     <div className="p-4">

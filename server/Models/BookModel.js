@@ -22,7 +22,7 @@ const BookSchema=new mongoose.Schema({
     },
     description:{
         type:String,
-        required:true,
+        // required:true,
         trim:true,
     },
     coverImage:{
@@ -42,7 +42,7 @@ const BookSchema=new mongoose.Schema({
     },
     coverImage:{
         type:String,
-        required:true,
+        // required:true,
     },
     rentalPrice:{
         type:Number,

@@ -22,7 +22,7 @@ function UserDetails() {
   const [favoriteBooks, setFavoriteBooks] = useState([]);
   const [allBooks, setAllBooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   console.log(userId)
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function UserDetails() {
 
 
         setUser(userRes.data.user);
-        
+
         const userBorrowedBooks = borrowedRes.data.data.filter(
           book => book.user._id === userId
         );
@@ -266,18 +266,16 @@ function UserDetails() {
                           <span className="text-blue-100">
                             Borrowed: {formatDate(book.borrowDate)}
                           </span>
-                          <span className={`${
-                            isOverdue ? 'text-red-300' : 'text-green-300'
-                          }`}>
+                          <span className={`${isOverdue ? 'text-red-300' : 'text-green-300'
+                            }`}>
                             Due: {formatDate(book.dueDate)}
                           </span>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            book.status === 'borrowed'
-                              ? isOverdue
-                                ? 'bg-red-500/20 text-red-300'
-                                : 'bg-green-500/20 text-green-300'
-                              : 'bg-blue-500/20 text-blue-300'
-                          }`}>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${book.status === 'borrowed'
+                            ? isOverdue
+                              ? 'bg-red-500/20 text-red-300'
+                              : 'bg-green-500/20 text-green-300'
+                            : 'bg-blue-500/20 text-blue-300'
+                            }`}>
                             {book.status}
                           </span>
                         </div>
@@ -326,11 +324,10 @@ function UserDetails() {
                         {[...Array(5)].map((_, i) => (
                           <FiStar
                             key={i}
-                            className={`w-4 h-4 ${
-                              i < Math.floor(book.averageRating || 0)
-                                ? 'text-yellow-400 fill-current'
-                                : 'text-gray-400'
-                            }`}
+                            className={`w-4 h-4 ${i < Math.floor(book.averageRating || 0)
+                              ? 'text-yellow-400 fill-current'
+                              : 'text-gray-400'
+                              }`}
                           />
                         ))}
                       </div>

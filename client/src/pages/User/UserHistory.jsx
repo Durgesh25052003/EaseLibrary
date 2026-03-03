@@ -3,7 +3,7 @@ import { getHistory } from '../../Servies/servies';
 import { FiCalendar, FiBook, FiClock, FiCheckCircle, FiAlertTriangle, FiSearch, FiFilter, FiUser, FiTrendingUp } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import Lottie from "lottie-react";
-import Emptybox from "../../../public/Emptybox.json";
+import Emptybox from "../../assets/Emptybox.json";
 import LoadingBar from '../../components/LoadingBar';
 
 function UserHistory() {
@@ -42,17 +42,17 @@ function UserHistory() {
     // FIX: Update useMemo dependency to use the state variable directly
     const filteredHistory = useMemo(() => {
         if (!Array.isArray(history) || history.length === 0) return [];
-        
+
         return history.filter(item => {
             if (!item) return false;
 
             // FIX: Add status filtering based on filterStatus
-            const matchesSearch = 
+            const matchesSearch =
                 (item.book?.title?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
                 (item.book?.author?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
                 (item.book?.genre?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
 
-            const matchesStatus = filterStatus === 'all' || 
+            const matchesStatus = filterStatus === 'all' ||
                 (filterStatus === 'returned' && item.returned) ||
                 (filterStatus === 'active' && !item.returned) ||
                 (filterStatus === 'overdue' && !item.returned && new Date(item.returnDate) < new Date());
@@ -68,7 +68,7 @@ function UserHistory() {
         total: Array.isArray(history) ? history.length : 0,
         returned: Array.isArray(history) ? history.filter(item => item?.returned).length : 0,
         active: Array.isArray(history) ? history.filter(item => !item?.returned).length : 0,
-        overdue: Array.isArray(history) ? history.filter(item => 
+        overdue: Array.isArray(history) ? history.filter(item =>
             !item?.returned && new Date(item.returnDate) < new Date()
         ).length : 0
     };
@@ -99,7 +99,7 @@ function UserHistory() {
         const end = actualReturnDate ? new Date(actualReturnDate) : new Date(returnDate);
         const diffTime = Math.abs(end - start);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         if (diffDays === 0) return 'Less than a day';
         if (diffDays === 1) return '1 day';
         return `${diffDays} days`;
@@ -167,7 +167,7 @@ function UserHistory() {
                     >
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm font-medium text-white/80">Currently Borrowed</p>
+                                <p className="text-sm font-medium text-white/80">Borrowed Yet</p>
                                 <p className="text-3xl font-bold text-blue-200">{stats.active}</p>
                             </div>
                             <FiClock className="w-8 h-8 text-blue-200" />

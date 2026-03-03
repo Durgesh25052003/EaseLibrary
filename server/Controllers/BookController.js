@@ -78,8 +78,9 @@ export const addBook=async (req, res) => {
 // Update
 export const updateBook = async (req, res) => {
     try {
-        const bookId = req.params.id;
-        const updatedData = req.body;
+        const bookId = req.params.bookId;
+        const updatedData = req.body.bookData;
+        console.log(bookId,updatedData,"🌟🌟🌟")
         const updatedBook = await BookModel.findByIdAndUpdate(bookId, updatedData, {
             new: true,
             runValidators: true,

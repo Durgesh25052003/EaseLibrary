@@ -24,6 +24,7 @@ import EditProfile from './pages/User/EditProfile';
 import UserDetails from './pages/Admin/UserDetails';
 import { FullScreenLoading } from './components/LoadingBar';
 import UserHistory from './pages/User/UserHistory';
+import AuthSuccess from './pages/Login/Auth-Success';
 
 
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <Signup />
+  },
+  {
+    path:"/google-success",
+    element:<AuthSuccess/>
   },
   {
     path: '/forgot-password',

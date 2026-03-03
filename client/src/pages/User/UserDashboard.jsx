@@ -17,10 +17,10 @@ function UserDashboard() {
         <div className='flex h-screen overflow-hidden'>
             <aside className='w-64 bg-gradient-to-br from-[#FFD23F] via-[#007EA7] to-[#00A8E8] shadow-lg p-6 flex-shrink-0 overflow-y-auto'>
                 <h1 className='text-6x1 font-bold text-center font-["Poppins"] text-[#fff] mb-2.5'>
-                    Ease Library
+                    LibraryEase
                 </h1>
-                <ul className='list-none mt-6 flex flex-col items-start gap-8'>
-                    <li className='hover:bg-[#007EA7] px-5 py-2 w-50 border-0 rounded-md '>
+                <ul className='list-none mt-6 flex flex-col items-start gap-5'>
+                    <li className='hover:backdrop-blur-lg hover:bg-white/10 px-5 py-2 w-50 border-0 rounded-md '>
                         <Link
                             to="/user/discover"
                             className='text-[#fff] text-[18px] font-["Poppins"] font-bold flex items-center gap-2 cursor-pointer'
@@ -28,7 +28,7 @@ function UserDashboard() {
                             <FontAwesomeIcon icon={faCompass} /> Discover
                         </Link>
                     </li>
-                    <li className='hover:bg-[#007EA7] px-5 py-2 w-50 border-0 rounded-md '>
+                    <li className='hover:backdrop-blur-lg hover:bg-white/10 px-5 py-2 w-50 border-0 rounded-md '>
                         <Link
                             to="/user/category"
                             className='text-[#fff] text-[18px] font-["Poppins"] font-bold flex items-center gap-2 cursor-pointer'
@@ -36,7 +36,7 @@ function UserDashboard() {
                             <FontAwesomeIcon icon={faList} /> Category
                         </Link>
                     </li>
-                    <li className='hover:bg-[#007EA7] px-5 py-2 w-50 border-0 rounded-md '>
+                    <li className='hover:backdrop-blur-lg hover:bg-white/10 px-5 py-2 w-50 border-0 rounded-md '>
                         <Link
                             to="/user/borrowedbooks"
                             className='text-[#fff] text-[18px] font-["Poppins"] font-bold flex items-center gap-2 cursor-pointer'
@@ -44,7 +44,7 @@ function UserDashboard() {
                             <FontAwesomeIcon icon={faBook} /> My Library
                         </Link>
                     </li>
-                    <li className='hover:bg-[#007EA7] px-5 py-2 w-50 border-0 rounded-md '>
+                    <li className='hover:backdrop-blur-lg hover:bg-white/10 px-5 py-2 w-50 border-0 rounded-md '>
                         <Link
                             to="/user/history"
                             className='text-[#fff] text-[18px] font-["Poppins"] font-bold flex items-center gap-2 cursor-pointer'
@@ -52,7 +52,7 @@ function UserDashboard() {
                             <FontAwesomeIcon icon={faClock} /> History
                         </Link>
                     </li>
-                    <li className='hover:bg-[#007EA7] px-5 py-2 w-50 border-0 rounded-md '>
+                    <li className='hover:backdrop-blur-lg hover:bg-white/10 px-5 py-2 w-50 border-0 rounded-md '>
                         <Link
                             to="/user/profile"
                             className='text-[#fff] text-[18px] font-["Poppins"] font-bold flex items-center gap-2 cursor-pointer'

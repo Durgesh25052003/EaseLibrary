@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaCalendarAlt, FaEdit, FaBook, FaHeart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { getUserById } from '../../Servies/servies';
+import userRoute, { getUserById } from '../../Servies/servies';
 import toast from 'react-hot-toast';
 
 function Profile() {
@@ -10,6 +10,7 @@ function Profile() {
         name: '',
         email: '',
         profilePic: '',
+        avatar: '',
         createdAt: null,
         borrowedBooks: [],
         favoriteBooks: []
@@ -29,15 +30,20 @@ function Profile() {
             setLoading(true);
             const user = JSON.parse(sessionStorage.getItem("user") || '{}');
             const response = await getUserById(user._id);
+            console.log(response)
             const userInfo = response.data.user || {};
+            userRef.current = userInfo;
+            console.log(userRef.current);
             setUserData({
                 name: userInfo.name || '',
                 email: userInfo.email || '',
                 profilePic: userInfo.profilePic || '',
+                avatar: userInfo.avatar || '',
                 createdAt: userInfo.createdAt || null,
                 borrowedBooks: userInfo.borrowedBooks || [],
                 favoriteBooks: userInfo.favorites || []
             });
+            console.log(userData, "✨✨✨✨✨✨✨");
         } catch (error) {
             toast.error('Failed to load profile data');
             console.error('Error fetching user data:', error);
@@ -108,9 +114,9 @@ function Profile() {
                                 className="relative group mb-6"
                             >
                                 <div className="w-32 h-32 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border-4 border-white/30 mx-auto">
-                                    {userData.profilePic ? (
+                                    {userRef.current.profilePic || userRef.current.avatar  ? (
                                         <img
-                                            src={userData.profilePic}
+                                            src={userData.profilePic || userData.avatar}
                                             alt={userData.name}
                                             className="w-full h-full object-cover"
                                         />

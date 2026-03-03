@@ -34,8 +34,8 @@ function AdminDashboard() {
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
       {/* Sidebar */}
-      <aside className="w-64 bg-gradient-to-br from-[#00A8E8] via-[#007EA7] to-[#FFD23F] text-white p-6 shadow-lg flex-shrink-0 overflow-y-auto">
-        <h2 className="text-3xl font-bold mb-8 text-center font-['Poppins'] flex items-center justify-center gap-2">
+      <aside className="w-70 bg-gradient-to-br from-[#00A8E8] via-[#007EA7] to-[#FFD23F] text-white p-6 shadow-lg flex-shrink-0 overflow-y-auto">
+        <h2 className="text-2xl font-bold mb-8 text-center font-['Poppins'] flex items-center justify-center gap-2">
           <FontAwesomeIcon icon={faUserShield} />
           Admin Panel
         </h2>
@@ -44,7 +44,7 @@ function AdminDashboard() {
             <li>
               <Link
                 to="/admin/dashboard"
-                className={`flex items-center gap-3 py-3 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active1 ? "bg-white text-[#007EA7]" : ""} transition-colors duration-200 font-['Poppins'] font-semibold text-lg`}
+                className={`flex items-center gap-3 py-3 px-4 rounded-md hover:backdrop-blur-lg hover:bg-white/10  ${ActiveTab.Active1 ? "backdrop-blur-lg bg-white/10 text-[#fff]" : ""} transition-colors duration-200 font-['Poppins'] font-semibold text-lg`}
                 onClick={() => {
                   setActiveTab({
                     Active1: true,
@@ -62,7 +62,7 @@ function AdminDashboard() {
             <li>
               <Link
                 to="/admin/users"
-                className={`flex items-center gap-3 py-3 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active2 ? "bg-white text-[#007EA7]" : ""} transition-colors duration-200 font-['Poppins'] font-semibold text-lg`}
+                className={`flex items-center gap-3 py-3 px-4 rounded-md hover:backdrop-blur-lg hover:bg-white/10 ${ActiveTab.Active2 ? "backdrop-blur-lg bg-white/10 text-[#fff]" : ""} transition-colors duration-200 font-['Poppins'] font-semibold text-lg`}
                 onClick={() => {
                   setActiveTab({
                     Active1: false,
@@ -80,7 +80,7 @@ function AdminDashboard() {
             <li>
               <Link
                 to="/admin/books"
-                className={`flex items-center gap-3 py-3 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active3 ? "bg-white text-[#007EA7]" : ""} transition-colors duration-200 font-['Poppins'] font-semibold text-lg`}
+                className={`flex items-center gap-3 py-3 px-4 rounded-md hover:backdrop-blur-lg hover:bg-white/10 ${ActiveTab.Active3 ? "backdrop-blur-lg bg-white/10 text-[#fff]" : ""} transition-colors duration-200 font-['Poppins'] font-semibold text-lg`}
                 onClick={() => {
                   setActiveTab({
                     Active1: false,
@@ -98,7 +98,7 @@ function AdminDashboard() {
             <li>
               <Link
                 to="/admin/borrowedbooks"
-                className={`flex items-center gap-3 py-3 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active4 ? "bg-white text-[#007EA7]" : ""} transition-colors duration-200 font-['Poppins'] font-semibold text-lg`}
+                className={`flex items-center gap-3 py-3 px-4 rounded-md hover:backdrop-blur-lg hover:bg-white/10 ${ActiveTab.Active4 ? "backdrop-blur-lg bg-white/10 text-[#fff]" : ""} transition-colors duration-200 font-['Poppins'] font-semibold text-lg`}
                 onClick={() => {
                   setActiveTab({
                     Active1: false,
@@ -116,7 +116,7 @@ function AdminDashboard() {
             <li>
               <Link
                 to="/admin/borrowRequest"
-                className={`flex items-center gap-3 py-3 px-4 rounded-md hover:bg-white hover:text-[#007EA7] ${ActiveTab.Active5 ? "bg-white text-[#007EA7]" : ""} transition-colors duration-200 font-['Poppins'] font-semibold text-lg`}
+                className={`flex items-center gap-3 py-3 px-4 rounded-md hover:backdrop-blur-lg hover:bg-white/10 ${ActiveTab.Active5 ? "backdrop-blur-lg bg-white/10 text-[#fff]" : ""} transition-colors duration-200 font-['Poppins'] font-semibold text-lg`}
                 onClick={() => {
                   setActiveTab({
                     Active1: false,

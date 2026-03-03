@@ -1,17 +1,17 @@
 import express from "express";
 import { connect } from "mongoose";
 
-import { config } from "dotenv";
-import {app} from "../server/app.js";
+import { config as envConfig } from "dotenv";
+import { app } from "../server/app.js";
+import "../server/utils/Passport.js";
 
 config({
-  path: "../server/config.env",
+  path: "../server/.env",
 });
 
 const DB_raw = process.env.DB_STRING;
 
-
-const DB=DB_raw.replace("<db_password>", process.env.DB_PASSWORD);
+const DB = DB_raw.replace("<db_password>", process.env.DB_PASSWORD);
 
 connect(DB).then(() => {
   console.log("Connected to MongoDB");

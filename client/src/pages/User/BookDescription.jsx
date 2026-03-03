@@ -22,6 +22,7 @@ const BookDescription = () => {
   const [Reviews, setReviews] = useState([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const ratingAverage = useRef(0)
+  const userBorrowRef = useRef([]);
   let [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -53,10 +54,23 @@ const BookDescription = () => {
   }, [book, rentalDays]);
 
   useEffect(() => {
+    isBorrowed();
     const user = JSON.parse(sessionStorage.getItem("user"));
     console.log(user)
     setUser(user);
   }, [])
+
+  const isBorrowed = async () => {
+    try {
+      const userSession = JSON.parse(sessionStorage.getItem("user"));
+      const userId = userSession._id;
+      const getUser = await getUserById(userId);
+      userBorrowRef.current = getUser.data.user.borrowedBooks || [];
+    } catch (error) {
+      console.error('Error checking borrowed books:', error);
+    }
+  };
+
 
   const getBookReviews = async () => {
     try {
@@ -94,10 +108,10 @@ const BookDescription = () => {
       //Adding the Notifications in the Firebase
       console.log(user)
       if (res?.data?.success) {
-        toast.success('Book borrowed successfully');
+        toast.success('Book Borrowing request has successfully sent');
         //Updating the History
-        const resHistory=await updateHistory(bookId)
-        console.log(resHistory,"🌟🌟🌟");
+        const resHistory = await updateHistory(bookId)
+        console.log(resHistory, "🌟🌟🌟");
       } else {
         toast.error('Book is already Borrowed');
       }
@@ -106,8 +120,12 @@ const BookDescription = () => {
         message: `${user.name} request to borrow ${book.title} for ${days} days`,
         title: 'Book Request',
         type: 'borrow',
-        date: new Date().toISOString().split("T")[0]
-
+        date: new Date().toISOString().split("T")[0],
+        time: new Date().toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        }),
       })
 
       console.log(res)
@@ -169,11 +187,10 @@ const BookDescription = () => {
                   className="w-full h-96 object-cover rounded-xl shadow-lg"
                 />
                 <div className="absolute top-4 right-4">
-                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${book.stock > 0
-                    ? 'bg-green-500 text-white'
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${!userBorrowRef.current.some(b => b.bookId === book._id) ? 'bg-green-500 text-white'
                     : 'bg-red-500 text-white'
                     }`}>
-                    {book.stock > 0 ? 'Available' : 'Borrowed'}
+                    {!userBorrowRef.current.some(b => b.bookId === book._id) ? 'Available' : 'Borrowed'}
                   </span>
                 </div>
               </div>

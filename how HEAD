@@ -1,0 +1,18 @@
+[33m60c31d3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m  install missed package
+[33mbf7747f[m chore: stop tracking env files and ignore secrets
+[33mf04e3f9[m  install missed package
+[33ma77a18b[m  install missed package
+[33mdcfa45c[m  install missed package
+[33m660feea[m[33m ([m[1;31morigin/main[m[33m)[m feat: add user history tracking and UI enhancements
+[33m0ed7d3b[m `Added various changes to client and server code, including updates to React components, API endpoints, and database models.`
+[33m78158ef[m feat: add Firebase integration and return book functionality
+[33m524e555[m feat(admin): add book management and borrowed books sections
+[33m318bd70[m feat(admin): add manage users and books pages with enhanced UI
+[33m0aaafbe[m Merge branch 'main' of https://github.com/Durgesh25052003/EaseLibrary
+[33mfb32a9a[m feat(admin): add admin dashboard with overview and navigation
+[33mf375d90[m Update README.md
+[33mb57d3b2[m Added Daily Remainder Email Feature
+[33mcc87e40[m Merge branch 'main' of https://github.com/Durgesh25052003/EaseLibrary
+[33mcf45ce4[m Addes Reset Password fucntionality
+[33m750394f[m Create README.md
+[33mf127e09[m Initial commit: Library Management System

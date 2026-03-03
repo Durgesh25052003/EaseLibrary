@@ -8,6 +8,8 @@ const notificationVariants = {
 };
 
 function NotificationList({ notifications, onRemove }) {
+  console.log(notifications)
+
   return (
     <div className="top-5 right-5 z-50 w-80 space-y-3">
       <AnimatePresence>
@@ -19,12 +21,13 @@ function NotificationList({ notifications, onRemove }) {
             exit="exit"
             variants={notificationVariants}
             transition={{ duration: 0.3 }}
-            className={`${notif.type==="Return"?"bg-red-200":"bg-green-200"} border-l-4 border-primary shadow-lg rounded-md p-4 flex items-start gap-3`}
+            className={`${notif.type === "Return" ? "bg-red-200" : "bg-green-200"} border-l-4 border-primary shadow-lg rounded-md p-4 flex items-start gap-3`}
           >
             <div className="flex-1">
               <div className="font-semibold text-primary">{notif.title}</div>
               <div className="text-black text-sm">{notif.message}</div>
               <div className="text-black text-sm">{notif.date}</div>
+              <div className="text-black text-sm">{notif.time}</div>
             </div>
             <button
               onClick={() => onRemove(notif.id)}

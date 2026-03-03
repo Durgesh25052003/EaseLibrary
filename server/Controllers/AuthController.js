@@ -118,7 +118,22 @@ export const loginUser = async (req, res, next) => {
 export const protect = async (req, res, next) => {
   try {
     // console.log(req.cookies);
-    const token = req.cookies.token;
+    let token;
+    if (req.cookies.token) {
+      token = req.cookies.token;
+    } else {
+      const authHeader = req.headers.authorization;
+      console.log(authHeader);
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({
+          success: false,
+          message: "Access token is missing or invalid",
+        });
+      }
+      // Extract token from Authorization header
+      token = authHeader.split(" ")[1];
+    }
+
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -129,6 +144,7 @@ export const protect = async (req, res, next) => {
     req.user = await UserModel.findById(decoded.id).select(
       "-password -confirmPassword"
     );
+    console.log("Iam here at protect route✨✨✨");
     if (!req.user) {
       return res.status(401).json({
         success: false,
@@ -241,5 +257,25 @@ const updateUserProfile = async (req, res, next) => {
     await user.save();
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const googleCallback = async (req, res, next) => {
+  try {
+    const token = createToken(req.user);
+    res.cookie("token", token, {
+      httpOnly: true,
+      expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+      sameSite: "none",
+      secure: true,
+    });
+    res.redirect(`${process.env.FRONTEND_URL}/google-success?token=${token}`);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+    res.redirect(`${process.env.FRONTEND_URL}/login/error=google_failed`);
   }
 };

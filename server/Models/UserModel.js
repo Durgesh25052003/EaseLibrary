@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
@@ -14,10 +13,23 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+    },
+    googleId: {
+      type: String,
+    },
+    avatar: {
+      type: String,
     },
     confirmPassword: {
       type: String,
+    },
+    isLoggedIn: {
+      type: String,
+      default: "false",
+    },
+    isVerified: {
+      type: String,
+      default:"false"
     },
     borrowedBooks: [
       {
@@ -71,11 +83,20 @@ const userSchema = new mongoose.Schema(
 // })
 
 userSchema.pre("save", async function (next) {
-  const password = this.password;
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(password, salt);
-  this.confirmPassword = undefined;
-  next();
+  // Only hash when a password exists and has been modified
+  if (!this.isModified("password") || !this.password) {
+    this.confirmPassword = undefined;
+    return next();
+  }
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    this.confirmPassword = undefined;
+    return next();
+  } catch (err) {
+    return next(err);
+  }
 });
 
 userSchema.methods.comparePassword = async function (enteredPassword) {

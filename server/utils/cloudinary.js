@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config({
     path: '../server/config.env',
-}); // Must come FIRST
+}); 
 
 console.log('Cloudinary config:', {
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

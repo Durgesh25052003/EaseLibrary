@@ -13,10 +13,10 @@ const firebaseConfig = {
   storageBucket: "library-management-system-u.firebasestorage.app",
   messagingSenderId: "545884417765",
   appId: "1:545884417765:web:aa032537d0e52cf030ae0c",
-  measurementId: "G-YXDY6JGS97"
+  measurementId: "G-YXDY6JGS97",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db=  getFirestore(app);
-export{db}
+const db = getFirestore(app);
+export { db };

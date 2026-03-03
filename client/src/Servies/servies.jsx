@@ -8,7 +8,7 @@ const bookRoute = new axios.create({
     baseURL: "http://localHost:3000/api/v1/books",
     withCredentials: true
 })
-const reviewRouter= new axios.create({
+const reviewRouter = new axios.create({
     baseURL: "http://localHost:3000/api/v1/reviews",
     withCredentials: true
 })
@@ -132,12 +132,25 @@ export const addBooks = async (formData) => {
         console.log(error)
     }
 }
+export const updateBook = async (bookData, bookId) => {
+    try {
+        console.log(bookData, bookId, "🌟🌟🌟")
+        const res = await bookRoute.patch(`/updateBook/${bookId}`, {
+            bookData
+        });
+        return res;
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-export const returnBook = async (userId, bookId) => {
+
+export const returnBook = async (userId, bookId, role) => {
     try {
         const res = await userRoute.post("/returnBook", {
             userId,
-            bookId
+            bookId,
+            role
         });
         return res;
     } catch (error) {
@@ -228,9 +241,9 @@ export const getReviews = async (bookId) => {
 
 // updating history
 
-export const updateHistory=async (bookId)=>{
+export const updateHistory = async (bookId) => {
     try {
-        const res=await userRoute.post("/addHistory",{
+        const res = await userRoute.post("/addHistory", {
             bookId
         })
         return res
@@ -239,11 +252,12 @@ export const updateHistory=async (bookId)=>{
     }
 }
 
-export const getHistory=async()=>{
+export const getHistory = async () => {
     try {
-        const res=await userRoute.get("/getHistory")
+        const res = await userRoute.get("/getHistory")
         return res
     } catch (error) {
         console.log(error)
     }
 }
+export default userRoute;

@@ -77,18 +77,23 @@ function BorrowedBooks() {
       const book = bookRef.current.find(book => book.book._id === bookId);
       console.log(book);
 
-      const res = await returnBook(userId, bookId);
+      const res = await returnBook(userId, bookId, "user");
 
       if (res?.data?.success) {
-        toast.success('Book returned successfully');
+        toast.success('Book return request has successfully sent..');
         setBorrowedBooks(prev => prev.filter(book => book._id !== bookId));
       }
       await addDoc(collection(db, 'notifications'), {
         id: user._id,
-        message: `${user.name} return ${book.bookTitle}`,
+        message: `${user.name} returning request of book: ${book.bookTitle}`,
         title: 'Book Return',
         type: 'Return',
-        date: new Date().toISOString().split("T")[0]
+        date: new Date().toISOString().split("T")[0],
+        time: new Date().toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        }),
 
       })
     } catch (error) {

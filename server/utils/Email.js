@@ -61,7 +61,7 @@ class Email {
     }
   }
 
-  async sendMailBookBorrowed(toEmail, subject, name, bookTitle, author, borrowDate, dueDate) {
+  async sendMailBookBorrowed(toEmail, subject, name, bookTitle, author, borrowDate, borrowCode, dueDate) {
     const emailTemplateBorrow = fs.readFileSync(path.join(__dirname, 'emailTemplateBorrow.html'), 'utf-8')
     
     const content = emailTemplateBorrow
@@ -69,7 +69,8 @@ class Email {
       .replace(/{bookTitle}/g, bookTitle)
       .replace(/{author}/g, author)
       .replace(/{borrowDate}/g, borrowDate)
-      .replace(/{dueDate}/g, dueDate);
+      .replace(/{dueDate}/g, dueDate)
+      .replace(/{borrowCode}/g, borrowCode.toString())
 
     try {
       const info = await this.transporter.sendMail({
@@ -104,7 +105,55 @@ class Email {
       console.error('Email error:', error);
     }
   }
-}
 
+  async sendReturnRequestNotification(toEmail, subject, payload) {
+    const { userName, userEmail, bookTitle, author, borrowCode, note } = payload;
+    const content = `
+      <div style="font-family:Segoe UI,Arial,sans-serif;line-height:1.6;color:#2c3e50">
+        <h2 style="color:#2ecc71">New Return Request</h2>
+        <p><strong>User:</strong> ${userName} (${userEmail})</p>
+        <p><strong>Book:</strong> ${bookTitle} by ${author}</p>
+        ${borrowCode ? `<p><strong>Borrow Code:</strong> ${borrowCode}</p>` : ""}
+        ${note ? `<p><strong>Note:</strong> ${note}</p>` : ""}
+        <p>Please review this request in the admin panel.</p>
+      </div>
+    `;
+    try {
+      await this.transporter.sendMail({
+        from: process.env.GMAIL_USER,
+        to: toEmail,
+        subject,
+        html: content,
+      });
+    } catch (error) {
+      console.error("Email error (sendReturnRequestNotification):", error);
+    }
+  }
+
+  async sendReturnStatusUpdate(toEmail, subject, payload) {
+    const { name, bookTitle, author, status, note } = payload;
+    const color =
+      status === "approved" ? "#2ecc71" : status === "rejected" ? "#e74c3c" : "#f39c12";
+    const content = `
+      <div style="font-family:Segoe UI,Arial,sans-serif;line-height:1.6;color:#2c3e50">
+        <h2 style="color:${color}">Return ${status.charAt(0).toUpperCase() + status.slice(1)}</h2>
+        <p>Hi ${name},</p>
+        <p>Your return ${status} for <strong>${bookTitle}</strong> by ${author}.</p>
+        ${note ? `<p><strong>Note:</strong> ${note}</p>` : ""}
+        <p>Thank you for using our library.</p>
+      </div>
+    `;
+    try {
+      await this.transporter.sendMail({
+        from: process.env.GMAIL_USER,
+        to: toEmail,
+        subject,
+        html: content,
+      });
+    } catch (error) {
+      console.error("Email error (sendReturnStatusUpdate):", error);
+    }
+  }
+}
 
 export default Email;
